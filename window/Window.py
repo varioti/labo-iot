@@ -7,7 +7,7 @@ class Window:
         self.is_open = False
         self.mode_auto = True
 
-        self.motor = Motor()
+        #self.motor = Motor()
         self.hub = Hub()
 
         self.temp_in = self.hub.get_temp_in()
