@@ -8,7 +8,7 @@ from flask import url_for, request
 
 @app.route("/")
 def hello_world():
-    return "<p>Hello, World!</p>"
+    return render_template("index.html")
 
 
 #######
