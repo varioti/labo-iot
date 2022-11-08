@@ -1,0 +1,21 @@
+#window_button {
+  position:relative;
+  height:281px;
+  width:450px;
+  margin:0 auto;
+}
+#window_button img {
+  position:absolute;
+  left:0;
+  -webkit-transition: opacity 1s ease-in-out;
+  -moz-transition: opacity 1s ease-in-out;
+  -o-transition: opacity 1s ease-in-out;
+  transition: opacity 1s ease-in-out;
+}
+
+#window_button img.transparent {
+opacity:0;
+}
+#window_button_onclick {
+cursor:pointer;
+}
