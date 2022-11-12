@@ -1,2 +1,3 @@
 Phidget22
 flask
+flask-sqlalchemy

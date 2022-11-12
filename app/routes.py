@@ -1,6 +1,7 @@
-from app import app
 from flask import render_template, redirect
 from flask import url_for, request
+
+from app import app
 
 
 ##########
