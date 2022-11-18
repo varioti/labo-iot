@@ -33,3 +33,28 @@ class AdvicesConsumption(db.Model):
         new_advice = AdvicesConsumption(type_d=type_d, advice=advice, device=device)
         new_advice.session.add(new_advice)
         db.session.commit()
+
+    def get_type_d(self):
+        """
+        :return the type of the device (str)
+        """
+        return self.type_d
+
+    def set_type_d(self, new_type):
+        """
+        affect: type_d = new_type (str)
+        """
+        self.type_d = new_type
+        db.session.commit()
+
+
+# Initializing the database
+
+AdvicesConsumption.add_new_advice("Consommmation", "Pour donner 750 lumens, une ampoule à incandescence a besoin de 60 W", "Ampoule à incandescence")
+AdvicesConsumption.add_new_advice("Consommation", "Pour donner 750 lumens, une ampoule économique a besoin 12 W ", "Ampoule économique")
+AdvicesConsumption.add_new_advice("Consommation", "Pour donner 750 lumens une ampoule LED a besoin 6.5 W", "Ampoule LED")
+
+AdvicesConsumption.add_new_advice("Consommation", "Energie nécessaire pour chauffer 1,5 litre d'eau de 20 à 95°C = 295 Wh", "Gazette")
+AdvicesConsumption.add_new_advice("Consommation", "Energie nécessaire pour chauffer 1,5 litre d'eau de 20 à 95°C = 162 Wh", "Induction")
+AdvicesConsumption.add_new_advice("Consommation", "Energie nécessaire pour chauffer 1,5 litre d'eau de 20 à 95°C = 233 Wh", "Vitrocéramique")
+AdvicesConsumption.add_new_advice("Consommation", "Energie nécessaire pour chauffer 1,5 litre d'eau de 20 à 95°C = 252 Wh", "Fonte")
