@@ -43,6 +43,17 @@ def window(state=False):
 
     return render_template("windows.html", state_window=state_window)
 
+@app.route("/open/")
+def manual_open():
+    w.open()
+    return redirect(url_for("window"))
+
+@app.route("/close/")
+def manual_close():
+    w.close()
+    return redirect(url_for("window"))
+
+
 
 #######
 # RUN #
