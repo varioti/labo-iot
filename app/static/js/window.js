@@ -1,4 +1,3 @@
-
 const socket = io();
 socket.on("update", update);
 

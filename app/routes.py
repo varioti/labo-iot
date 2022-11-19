@@ -41,7 +41,7 @@ def window(state=False):
     if request.method == 'POST':
         return redirect(url_for("window"))
 
-    return render_template("window.html", state_window=state_window)
+    return render_template("windows.html", state_window=state_window)
 
 
 #######
