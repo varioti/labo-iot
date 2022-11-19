@@ -1,10 +1,11 @@
-from flask import render_template, redirect
+from flask import render_template, redirect, Flask
 from flask import url_for, request
 import time 
 
 from app import app, db, scheduler, socketio
 from sensors.window.Window import Window
 
+from app import db
 
 ##########
 # WINDOW #
@@ -46,5 +47,6 @@ def window(state=False):
 #######
 # RUN #
 #######
+
 if __name__ == "__main__":
     socketio.run(app)
