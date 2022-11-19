@@ -7,13 +7,30 @@
 </head>
 <body>
 <div class="">
-    {% if state_window == True -%}
-        <span>La fenêtre est ouverte</span><br>
-        <img src= "../static/image/window_open.png" alt="open"/>
-    {% else -%}
-        <span>La fenêtre est fermé</span><br>
-        <img src= "../static/image/window_close.png" alt="close"/>
-    {% endif %}
+    <div>
+        <span id="window_info">La fenêtre est fermée</span><br>
+        <img id="window_img" src= "../static/image/window_close.png" alt="closed"/>
+    </div>
+    <div>
+        <table id="measures">
+            <tr>
+                <td>Température intérieure : </td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td>Température extérieure : </td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td>Humidité : </td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td>Action(s) actuelle(s) : </td>
+                <td>-</td>
+            </tr>
+        </table>
+    </div>
   <!--<img src= "../static/image/window_close.png"
        onclick="changeImage(this)"  alt="close"/>
   <script>
@@ -24,5 +41,33 @@
 
   </script>-->
 </div>
+<script>
+    const socket = io();
+    socket.on("update", update);
+
+    ///////////////////////////////////////
+    // UPDATE when new measures received //
+    ///////////////////////////////////////
+    function update(is_open, temp_in, temp_out, hum, current) {
+        var window_info = document.getElementById("window_info");
+        var window_img = document.getElementById("window_img");
+
+        if (is_open) {
+            window_info.innerHTML = "La fenêtre est ouverte"
+            window_img.src = "../static/image/window_open.png"
+            window_img.alt = "open"
+        } else {
+            window_info.innerHTML = "La fenêtre est fermée"
+            window_img.src = "../static/image/window_close.png"
+            window_img.alt = "closed"
+        }
+
+        var myTable = document.getElementById("measures");
+        myTable.rows[0].cells[1].innerHTML = temp_in.toFixed(1) + " °C";
+        myTable.rows[1].cells[1].innerHTML = temp_out.toFixed(1) + " °C";
+        myTable.rows[2].cells[1].innerHTML = hum.toFixed(2) + " %";
+        myTable.rows[3].cells[1].innerHTML = current;
+    }
+</script>
 </body>
 {% endblock %}
