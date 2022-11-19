@@ -17,7 +17,7 @@ DEHUM = "dehumidification"
 
 # Represent the smat window
 class Window:
-    def __init__(self, temp_desired = 20, max_hum = 70):
+    def __init__(self, temp_desired = 22, max_hum = 60):
         self.is_open = False
         self.mode_auto = True
         self.state = []
@@ -93,12 +93,13 @@ class Window:
         self.state = []
         self.get_measures()
         
-        # Reasons why whe should open the window
-        too_cold_in = self.temp_in < self.temp_desired and self.temp_out > self.temp_in
-        too_hot_in = self.temp_in > self.temp_desired and self.temp_out < self.temp_in
+        # Reasons why whe should open the window (add margin)
+        too_cold_in = self.temp_in + 0.2 < self.temp_desired and self.temp_out > self.temp_in + 0.5
+        too_hot_in = self.temp_in - 0.2 > self.temp_desired and self.temp_out < self.temp_in - 0.5
 
-        self.check_end_dehum(10) # Check if 10 minutes passed since window open for DEHUM (if yes cooldown started)
-        too_hum_in = self.humidity > self.max_hum and not self.cooldown # And window will not stay open
+        self.check_end_dehum(1) # Check if 10 minutes passed since window open for DEHUM (if yes cooldown started)
+        # And window in cooldown
+        too_hum_in = self.humidity > self.max_hum and (not self.cooldown or abs(self.temp_out - self.temp_in) < 2)
 
         if too_cold_in:
             self.state.append(HEAT)
