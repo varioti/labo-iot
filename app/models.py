@@ -1,6 +1,7 @@
 from app import db
 
-db.create_all()
+
+#db.create_all()
 
 
 class AdvicesConsumption(db.Model):
@@ -31,7 +32,7 @@ class AdvicesConsumption(db.Model):
         """
 
         new_advice = AdvicesConsumption(type_d=type_d, advice=advice, device=device)
-        new_advice.session.add(new_advice)
+        db.session.add(new_advice)
         db.session.commit()
 
     def get_type_d(self):
@@ -46,6 +47,29 @@ class AdvicesConsumption(db.Model):
         """
         self.type_d = new_type
         db.session.commit()
+
+class Devices(db.Model):
+    """
+
+    """
+    __tablename__ = "devices"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(150), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+
+class MesaureConsumption(db.Model):
+    """
+    """
+    __tablename__ = "measure_consumption"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    measure = db.Column(db.Integer, nullable=False)
+    datetime = db.Column(db.DateTime, nullable=False)
+    state = db.Column(db.String(150), nullable=False)
+
+    device_id = db.Column(db.Integer, db.ForeignKey("devices.id"))
+    device = db.relationship("Devices", backref=db.backref("deviceI", lazy=True))
 
 
 # Initializing the database
