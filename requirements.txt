@@ -1,3 +1,5 @@
 Phidget22
 flask
 flask-sqlalchemy
+flask_apscheduler
+flask-socketio

@@ -4,20 +4,22 @@
 # - handle when the user open (or close) the window mannualy
 # - communication between APP and WINDOW
 
-from phidgets.motor import Motor
-from phidgets.hub import Hub
-import time
-from datetime import datetime, timedelta
+from sensors.window.phidgets.motor import Motor
+from sensors.window.phidgets.hub import Hub
+
+import random
+from datetime import datetime
 
 # Window actions
-NOT = "nothing"
-HEAT = "heating"
-COOL = "cooling"
-DEHUM = "dehumidification"
+NOT = "rien"
+HEAT = "chauffer"
+COOL = "refroidir"
+DEHUM = "deshumidifier"
 
 # Represent the smat window
 class Window:
-    def __init__(self, temp_desired = 22, max_hum = 60):
+    def __init__(self, temp_desired = 20, max_hum = 70, is_testing = False):
+        self.is_testing = is_testing
         self.is_open = False
         self.mode_auto = True
         self.state = []
@@ -27,44 +29,66 @@ class Window:
         self.temp_desired = temp_desired
         self.max_hum = max_hum
 
-        self.motor = Motor()
-        self.hub = Hub()
+        if not self.is_testing :
+            self.motor = Motor()
+            self.hub = Hub()
 
-        self.temp_in = self.hub.get_temp_in()
-        self.temp_out = self.hub.get_temp_out()
+            self.temp_in = self.hub.get_temp_in()
+            self.temp_out = self.hub.get_temp_out()
 
-        self.humidity = self.hub.get_humidity()
+            self.humidity = self.hub.get_humidity()
+        else :
+            self.temp_in = random.uniform(15, 25)
+            self.temp_out = random.uniform(15, 25)
+
+            self.humidity = random.uniform(50, 100)
 
     # Open the window (use motor)
     def open(self):
         print("open")
         self.is_open = True
-        self.motor.set_position(30)
+        if not self.is_testing :
+            self.motor.set_position(30)
 
     # Close the window (use motor)
     def close(self):
         print("close")
         self.is_open = False
-        self.motor.set_position(0)
+        if not self.is_testing :
+            self.motor.set_position(0)
+
+    # Return open state of the window
+    def get_is_open(self):
+        return self.is_open
 
     # Get measures from the 3 sensors (2x temp, 1x humidity)
-    def get_measures(self):
-        self.temp_in = self.hub.get_temp_in()
-        self.temp_out = self.hub.get_temp_out()
-        self.humidity = self.hub.get_humidity()
+    def make_measures(self):
+        if not self.is_testing :
+            self.temp_in = self.hub.get_temp_in()
+            self.temp_out = self.hub.get_temp_out()
+            self.humidity = self.hub.get_humidity()
+
+        else:
+            self.temp_in = random.uniform(15, 25)
+            self.temp_out = random.uniform(15, 25)
+            self.humidity = random.uniform(50, 100)
 
         print(self.temp_in)
         print(self.temp_out)
         print(self.humidity)
 
+    # Returns current measures
+    def get_measures(self):
+        return self.temp_in, self.temp_out, self.humidity
+
     # Return string of current action(s) of window (Example: "heating and DEHUMidification")
     def repr_state(self):
         if len(self.state) == 0 :
-            return "Nothing"
+            return "Aucune"
 
         repr = self.state[0]
         for i in range(len(self.state)-1):
-            repr = repr + " and " + self.state[i+1]
+            repr = repr + " et " + self.state[i+1]
 
         return repr
     
@@ -91,7 +115,7 @@ class Window:
     def behavior(self):
         # Init
         self.state = []
-        self.get_measures()
+        self.make_measures()
         
         # Reasons why whe should open the window (add margin)
         too_cold_in = self.temp_in + 0.2 < self.temp_desired and self.temp_out > self.temp_in + 0.5
@@ -129,11 +153,3 @@ class Window:
                 # If window is only dehumidifiating the room we save the time in order to limit the time in which the window will stay open
                 if self.state == [DEHUM]:
                     self.set_last_dehum()
-
-
-# Initiate window
-w = Window()
-while w.mode_auto:
-    w.behavior()
-    time.sleep(2)
-
