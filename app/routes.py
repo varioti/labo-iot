@@ -1,7 +1,10 @@
-from flask import render_template, redirect
+from flask import render_template, redirect, Flask
 from flask import url_for, request
 
+
 from app import app
+
+from app import db
 
 
 ##########
@@ -25,5 +28,7 @@ def window(state=False):
 #######
 # RUN #
 #######
+
 if __name__ == "__main__":
     app.run()
+
