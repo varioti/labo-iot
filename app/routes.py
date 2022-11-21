@@ -3,15 +3,22 @@ from flask import url_for, request
 import time 
 
 from app import app, db, scheduler, socketio
+from app.models import Devices, MeasureConsumption
 from sensors.window.Window import Window
+from sensors.energy.energy import Energy
 
 from app import db
 
-##########
-# WINDOW #
-##########
+###########
+# SENSORS #
+###########
 
 w = Window(is_testing=True) # Set is_testing to True if phidgets not plugged
+
+devices = Devices.query.all()
+e = {}
+for device in devices:
+    e[device.id] = Energy(hub_port= device.hub_port,nb_volt= device.nb_volt, simulate=False) # Set simulate to True if phidgets not plugged
 
 # Recurrent background action of window
 def window_behaviour():
@@ -22,6 +29,25 @@ def window_behaviour():
 
     # Send info to page
     socketio.emit("update", (is_open, temp_in, temp_out, hum, current_state))
+
+# Recurrent background action of window
+def energy_behaviour():
+    devices_names = []
+    devices_measures = []
+
+    for eid in e.keys():
+        sensor = e[eid]
+        sensor.make_measure()
+        MeasureConsumption.add_new_measure(sensor.get_watt(), eid)
+        devices_names.append(Devices.query.get(eid).name)
+        devices_measures.append(MeasureConsumption.query.filter(MeasureConsumption.device_id == eid))
+
+    # Send info to page
+    socketio.emit("update", (devices_names, devices_measures))
+    
+
+
+
 
 # Set the reccurent backround action (for window) each 5 sec
 scheduler.add_job(id='window', func=window_behaviour, trigger="interval", seconds=5)
