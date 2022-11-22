@@ -1,9 +1,5 @@
-from app import db
+from app import db, app
 from datetime import datetime
-
-db.drop_all()
-db.create_all()
-db.session.commit()
 
 class AdvicesConsumption(db.Model):
     """
@@ -94,21 +90,29 @@ class MeasureConsumption(db.Model):
         measure: name of the device (string)
         device_id: description of the device (string)
         """
+        with app.app_context():
+            new_measure = MeasureConsumption(measure=m, datetime=datetime.today(), device_id=did)
+            db.session.add(new_measure)
+            db.session.commit()
 
-        new_measure = MeasureConsumption(measure=m, datetime=datetime.today(), device_id=did)
-        db.session.add(new_measure)
-        db.session.commit()
+    def get_serializable_measure(self):
+        return {"datetime":self.datetime.strftime("%Y/%m/%d, %H:%M:%S"), "measure":self.measure}
 
 # Initializing the database
-Devices.add_new_device(name="Frigo", description="Frigo de 12V", nb_volt=12, hub_port=0)
-Devices.add_new_device(name="Bouiloire", description="Bouiloire de 12V", nb_volt=12, hub_port=2)
-Devices.add_new_device(name="Taque de cuisson", description="Taque de cuisson", nb_volt=12, hub_port=3)
+with app.app_context():
+    Devices.query.delete()
+    Devices.add_new_device(name="Frigo", description="Frigo de 12V", nb_volt=12, hub_port=0)
+    Devices.add_new_device(name="Bouiloire", description="Bouiloire de 12V", nb_volt=12, hub_port=2)
+    Devices.add_new_device(name="Taque de cuisson", description="Taque de cuisson", nb_volt=12, hub_port=3)
 
-AdvicesConsumption.add_new_advice("Consommation", "Pour donner 750 lumens, une ampoule à incandescence a besoin de 60 W", "Ampoule à incandescence")
-AdvicesConsumption.add_new_advice("Consommation", "Pour donner 750 lumens, une ampoule économique a besoin 12 W ", "Ampoule économique")
-AdvicesConsumption.add_new_advice("Consommation", "Pour donner 750 lumens une ampoule LED a besoin 6.5 W", "Ampoule LED")
+    AdvicesConsumption.query.delete()
+    AdvicesConsumption.add_new_advice("Consommation", "Pour donner 750 lumens, une ampoule à incandescence a besoin de 60 W", "Ampoule à incandescence")
+    AdvicesConsumption.add_new_advice("Consommation", "Pour donner 750 lumens, une ampoule économique a besoin 12 W ", "Ampoule économique")
+    AdvicesConsumption.add_new_advice("Consommation", "Pour donner 750 lumens une ampoule LED a besoin 6.5 W", "Ampoule LED")
 
-AdvicesConsumption.add_new_advice("Consommation", "Energie nécessaire pour chauffer 1,5 litre d'eau de 20 à 95°C = 295 Wh", "Gazette")
-AdvicesConsumption.add_new_advice("Consommation", "Energie nécessaire pour chauffer 1,5 litre d'eau de 20 à 95°C = 162 Wh", "Induction")
-AdvicesConsumption.add_new_advice("Consommation", "Energie nécessaire pour chauffer 1,5 litre d'eau de 20 à 95°C = 233 Wh", "Vitrocéramique")
-AdvicesConsumption.add_new_advice("Consommation", "Energie nécessaire pour chauffer 1,5 litre d'eau de 20 à 95°C = 252 Wh", "Fonte")
+    AdvicesConsumption.add_new_advice("Consommation", "Energie nécessaire pour chauffer 1,5 litre d'eau de 20 à 95°C = 295 Wh", "Gazette")
+    AdvicesConsumption.add_new_advice("Consommation", "Energie nécessaire pour chauffer 1,5 litre d'eau de 20 à 95°C = 162 Wh", "Induction")
+    AdvicesConsumption.add_new_advice("Consommation", "Energie nécessaire pour chauffer 1,5 litre d'eau de 20 à 95°C = 233 Wh", "Vitrocéramique")
+    AdvicesConsumption.add_new_advice("Consommation", "Energie nécessaire pour chauffer 1,5 litre d'eau de 20 à 95°C = 252 Wh", "Fonte")
+
+    MeasureConsumption.query.delete()

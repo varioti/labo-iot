@@ -10,14 +10,16 @@ from flask_socketio import SocketIO
 app = Flask(__name__)
 
 app.config.from_object(Config)
-app.app_context().push()
+
+from flask_sqlalchemy import SQLAlchemy
+db = SQLAlchemy(app)
+
+with app.app_context():
+    db.create_all()
 
 scheduler = APScheduler()
 scheduler.init_app(app)
 scheduler.start()
-
-from flask_sqlalchemy import SQLAlchemy
-db = SQLAlchemy(app)
 
 socketio = SocketIO(app)
 

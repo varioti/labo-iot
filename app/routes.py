@@ -3,7 +3,7 @@ from flask import url_for, request
 import time 
 
 from app import app, db, scheduler, socketio
-from app.models import Devices, MeasureConsumption
+from app.models import Devices, MeasureConsumption, AdvicesConsumption
 from sensors.window.Window import Window
 from sensors.energy.energy import Energy
 
@@ -14,8 +14,14 @@ from app import db
 ###########
 
 w = Window(is_testing=True) # Set is_testing to True if phidgets not plugged
+# Initializing the database
+with app.app_context():
+    devices =  list(Devices.query.all())
+with scheduler.app.app_context():
+    MeasureConsumption.query.delete()
 
-devices = Devices.query.all()
+print(devices)
+
 e = {}
 for device in devices:
     e[device.id] = Energy(hub_port= device.hub_port,nb_volt= device.nb_volt, simulate=True) # Set simulate to True if phidgets not plugged
@@ -38,9 +44,14 @@ def energy_behaviour():
     for eid in e.keys():
         sensor = e[eid]
         sensor.make_measure()
-        MeasureConsumption.add_new_measure(sensor.get_watt(), eid)
-        devices_names.append(Devices.query.get(eid).name)
-        devices_measures.append(MeasureConsumption.query.filter(MeasureConsumption.device_id == eid))
+        MeasureConsumption.add_new_measure(sensor.get_amp(), eid)
+        with scheduler.app.app_context():
+            devices_names.append(Devices.query.get(eid).name)
+            device_measures = list(MeasureConsumption.query.filter(MeasureConsumption.device_id == eid))
+            devices_measures.append(list(map(lambda x: x.get_serializable_measure(), device_measures)))
+
+    print(devices_names)
+    print(devices_measures)
 
     # Send info to page
     socketio.emit("newmeasure", (devices_names, devices_measures))
