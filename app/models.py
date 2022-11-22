@@ -3,7 +3,7 @@ from datetime import datetime
 
 db.drop_all()
 db.create_all()
-
+db.session.commit()
 
 class AdvicesConsumption(db.Model):
     """
@@ -95,10 +95,9 @@ class MeasureConsumption(db.Model):
         device_id: description of the device (string)
         """
 
-        new_measure = MesaureConsumption(measure=m, datetime=datetime.today(), device_id=did)
+        new_measure = MeasureConsumption(measure=m, datetime=datetime.today(), device_id=did)
         db.session.add(new_measure)
         db.session.commit()
-
 
 # Initializing the database
 Devices.add_new_device(name="Frigo", description="Frigo de 12V", nb_volt=12, hub_port=0)

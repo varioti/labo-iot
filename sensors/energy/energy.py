@@ -35,12 +35,3 @@ class Energy:
     # Get Annual Energy value (in kWATT/HOUR)
     def get_annual_kwatt(self):
         return self.nb_amp * self.nb_volt * 24 * 365 / 1000
-
-e1 = Energy(0,12,False)
-e2 = Energy(2,12,False)
-e3 = Energy(3,12,False)
-while True:
-    e1.make_measure()
-    e2.make_measure()
-    e3.make_measure()
-    time.sleep(2)
