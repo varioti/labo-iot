@@ -98,8 +98,38 @@ class MeasureConsumption(db.Model):
     def get_serializable_measure(self):
         return {"datetime":self.datetime.strftime("%Y/%m/%d, %H:%M:%S"), "measure":self.measure}
 
+
+class WindowLog(db.Model):
+    """
+    """
+    __tablename__ = "window_log"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    action = db.Column(db.String, nullable=False)
+    datetime = db.Column(db.DateTime, nullable=False)
+
+    def add_new_action(action):
+        """
+        Add a new action in the log
+
+        :parameter
+        measure: name of the device (string)
+        device_id: description of the device (string)
+        """
+        with app.app_context():
+            new_action = WindowLog(action=action, datetime=datetime.today())
+            db.session.add(new_action)
+            db.session.commit()
+
+    def get_serializable_action(self):
+        return {"datetime":self.datetime.strftime("%Y/%m/%d, %H:%M:%S"), "action":self.action}
+
+
 # Initializing the database
 with app.app_context():
+    db.drop_all()
+    db.create_all()
+
     Devices.query.delete()
     Devices.add_new_device(name="Frigo", description="Frigo de 12V", nb_volt=12, hub_port=0)
     Devices.add_new_device(name="Bouiloire", description="Bouiloire de 12V", nb_volt=12, hub_port=2)

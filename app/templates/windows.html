@@ -8,6 +8,7 @@
 <body>
 <div class="">
     <div>
+        <h3>Fenêtre</h3>
         {% if is_open %}
             <span id="window_info">La fenêtre est ouverte</span><br>
             <img id="window_img" src= "../static/image/window_open.png" alt="open"/>
@@ -17,7 +18,11 @@
             <img id="window_img" src= "../static/image/window_close.png" alt="closed"/>
             <a id="open" href="/open/">Ouvrir</a>
         {% endif %}
-        <a id="auto"></a>
+
+        
+        <a id="auto" href="/mode/">
+            {% if mode_auto %}Désactiver mode auto{% else %}Activer mode auto{% endif %}
+        </a>
     </div>
     <div>
         <table id="measures">
@@ -39,15 +44,17 @@
             </tr>
         </table>
     </div>
-  <!--<img src= "../static/image/window_close.png"
-       onclick="changeImage(this)"  alt="close"/>
-  <script>
-
-    function changeImage(image) {
-        image.src = '/static/image/window_open.png';
-    }
-
-  </script>-->
+    <div>
+        <h3>Log des actions automatiques</h3>
+        <table id="log">
+            {% for action in log %}
+            <tr>
+                <td>{{action["datetime"]}}</td>
+                <td>{{action["action"]}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
 </div>
 
 <script src="{{url_for('static', filename='js/window.js')}}"></script>
