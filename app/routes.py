@@ -33,9 +33,10 @@ def window_behaviour():
     temp_in, temp_out, hum = w.get_measures()
     current_state = w.repr_state()
     is_open = w.get_is_open()
+    mode = w.mode_auto
 
     # Send info to page
-    socketio.emit("update", (is_open, temp_in, temp_out, hum, current_state))
+    socketio.emit("update", (is_open, temp_in, temp_out, hum, current_state, mode))
 
 # Recurrent background action of window
 def energy_behaviour():
@@ -78,17 +79,29 @@ def window(state=False):
     temp_in, temp_out, hum = w.get_measures()
     current_state = w.repr_state()
     is_open = w.get_is_open()
+    mode = w.mode_auto
 
-    return render_template("windows.html", temp_in=temp_in, temp_out=temp_out, hum=hum, state=current_state, is_open=is_open)
+    return render_template("windows.html", temp_in=temp_in, temp_out=temp_out, hum=hum, state=current_state, is_open=is_open, mode_auto=mode)
 
 @app.route("/open/")
 def manual_open():
     w.open()
+    w.set_manual()
     return redirect(url_for("window"))
 
 @app.route("/close/")
 def manual_close():
     w.close()
+    w.set_manual()
+    return redirect(url_for("window"))
+
+@app.route("/mode/")
+def set_mode():
+    if w.mode_auto :
+        w.set_manual()
+    else :
+        w.set_auto()
+
     return redirect(url_for("window"))
 
 @app.route("/energy_history/")

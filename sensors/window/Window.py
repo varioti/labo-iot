@@ -22,6 +22,7 @@ class Window:
         self.is_testing = is_testing
         self.is_open = False
         self.mode_auto = True
+
         self.state = []
         self.last_dehum = None
         self.cooldown = False
@@ -56,6 +57,16 @@ class Window:
         self.is_open = False
         if not self.is_testing :
             self.motor.set_position(0)
+
+    # Set the window in auto mode (window will open and close by it-self)
+    def set_auto(self):
+        print("auto")
+        self.mode_auto = True
+
+    # Set the window in manual mode (window will only open if user do it)
+    def set_manual(self):
+        print("manual")
+        self.mode_auto = False
 
     # Return open state of the window
     def get_is_open(self):
@@ -109,8 +120,6 @@ class Window:
                 self.set_last_dehum()
                 self.cooldown = True
 
-
-
     # Define the behavior of the window in function of the measures and its current state
     def behavior(self):
         # Init
@@ -138,7 +147,7 @@ class Window:
         if self.is_open :
             # If no need to HEAT, COOL or DEHUM => close
             # Else => keep open
-            if len(self.state) == 0:
+            if len(self.state) == 0 and self.mode_auto:
                 self.close()
                 print(f"Window closed (Temp inside = {self.temp_in}°C | Temp outside = {self.temp_out}°C | Humidity = {self.humidity})")
 
@@ -146,7 +155,7 @@ class Window:
         else:
             # If need to HEAT, COOL or DEHUM => open
             # Else => keep closed
-            if len(self.state) > 0 :
+            if len(self.state) > 0 and self.mode_auto:
                 self.open()
                 print(f"Window opened for {self.repr_state()} (Temp inside = {self.temp_in}°C | Temp outside = {self.temp_out}°C | Humidity = {self.humidity})")
 

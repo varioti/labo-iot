@@ -17,7 +17,11 @@
             <img id="window_img" src= "../static/image/window_close.png" alt="closed"/>
             <a id="open" href="/open/">Ouvrir</a>
         {% endif %}
-        <a id="auto"></a>
+
+        
+        <a id="auto" href="/mode/">
+            {% if mode_auto %}Désactiver mode auto{% else %}Activer mode auto{% endif %}
+        </a>
     </div>
     <div>
         <table id="measures">
