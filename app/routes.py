@@ -73,13 +73,13 @@ def hello_world():
     return render_template("index.html")
 
 
-@app.route("/window/", methods=["GET", "POST"])
+@app.route("/window/")
 def window(state=False):
-    state_window = state
-    if request.method == 'POST':
-        return redirect(url_for("window"))
+    temp_in, temp_out, hum = w.get_measures()
+    current_state = w.repr_state()
+    is_open = w.get_is_open()
 
-    return render_template("windows.html", state_window=state_window)
+    return render_template("windows.html", temp_in=temp_in, temp_out=temp_out, hum=hum, state=current_state, is_open=is_open)
 
 @app.route("/open/")
 def manual_open():
