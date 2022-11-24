@@ -1,0 +1,17 @@
+{% extends "index.html" %}
+{% block content %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/history.js')}}" />
+</head>
+<body>
+<div id="measures_tables">
+</div>
+
+<script src="{{url_for('static', filename='js/energy.js')}}"></script>
+
+</body>
+
+{% endblock %}
