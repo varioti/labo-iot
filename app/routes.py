@@ -18,7 +18,8 @@ w = Window(is_testing=True) # Set is_testing to True if phidgets not plugged
 with app.app_context():
     devices =  list(Devices.query.all())
 with scheduler.app.app_context():
-    MeasureConsumption.query.delete()
+    db.session.query(MeasureConsumption).delete()
+    db.session.commit()
 
 print(devices)
 
