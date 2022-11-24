@@ -3,7 +3,7 @@ from flask import url_for, request
 import time 
 
 from app import app, db, scheduler, socketio
-from app.models import Devices, MeasureConsumption, AdvicesConsumption
+from app.models import Devices, MeasureConsumption, AdvicesConsumption, WindowLog
 from sensors.window.Window import Window
 from sensors.energy.energy import Energy
 
@@ -29,14 +29,18 @@ for device in devices:
 
 # Recurrent background action of window
 def window_behaviour():
-    w.behavior()
+    action = w.behavior()
+    if action is not None :
+        WindowLog.add_new_action(action)
+    with scheduler.app.app_context():
+        log = list(map(lambda x: x.get_serializable_action(), list(WindowLog.query.all())))
     temp_in, temp_out, hum = w.get_measures()
     current_state = w.repr_state()
     is_open = w.get_is_open()
     mode = w.mode_auto
 
     # Send info to page
-    socketio.emit("update", (is_open, temp_in, temp_out, hum, current_state, mode))
+    socketio.emit("update", (is_open, temp_in, temp_out, hum, current_state, mode, log))
 
 # Recurrent background action of window
 def energy_behaviour():
@@ -81,7 +85,10 @@ def window(state=False):
     is_open = w.get_is_open()
     mode = w.mode_auto
 
-    return render_template("windows.html", temp_in=temp_in, temp_out=temp_out, hum=hum, state=current_state, is_open=is_open, mode_auto=mode)
+    with app.app_context():
+        log = list(map(lambda x: x.get_serializable_action(), list(WindowLog.query.all())))
+
+    return render_template("windows.html", temp_in=temp_in, temp_out=temp_out, hum=hum, state=current_state, is_open=is_open, mode_auto=mode, log=log)
 
 @app.route("/open/")
 def manual_open():

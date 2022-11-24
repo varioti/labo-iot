@@ -4,7 +4,7 @@ socket.on("update", update);
 ///////////////////////////////////////
 // UPDATE when new measures received //
 ///////////////////////////////////////
-function update(is_open, temp_in, temp_out, hum, current, mode_auto) {
+function update(is_open, temp_in, temp_out, hum, current, mode_auto, log) {
     var window_info = document.getElementById("window_info");
     var window_img = document.getElementById("window_img");
     var open_button = document.getElementById("open");

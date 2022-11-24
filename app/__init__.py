@@ -14,9 +14,6 @@ app.config.from_object(Config)
 from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy(app)
 
-with app.app_context():
-    db.create_all()
-
 scheduler = APScheduler()
 scheduler.init_app(app)
 scheduler.start()
