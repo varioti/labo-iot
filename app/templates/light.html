@@ -1,0 +1,32 @@
+{% extends "index.html" %}
+{% block content %}
+
+<body>
+    <div class="col-5">
+        <h4>Quel type d'ampoule consomme le moins</h3>
+        
+            {% if light_advices is defined and light_advices|length %}
+            <table class="table table-striped table-sm">
+              <caption>Les types d'ampoule et leur consommation</caption>
+              <tr>
+                <th>N°</th>
+                <th>Type</th>
+                <th>Consommation</th>
+              </tr>
+  
+              {% for advice in light_advices%}
+                
+                  <tr>
+                    <td>{{ loop.index }}</td>
+                    <td> {{ advice["device"] }} </td>
+                    <td>  {{ advice["advice"]}} </td>
+                  </tr> 
+             {% endfor %}
+            </table>
+          {% endif %}
+
+    </div>
+
+</body>
+
+{% endblock %}
