@@ -73,14 +73,14 @@ class Window:
     # Get measures from the 3 sensors (2x temp, 1x humidity)
     def make_measures(self):
         if not self.is_testing :
-            self.temp_in = self.hub.get_temp_in()
-            self.temp_out = self.hub.get_temp_out()
-            self.humidity = self.hub.get_humidity()
+            self.temp_in = round(self.hub.get_temp_in(), 1)
+            self.temp_out = round(self.hub.get_temp_out(), 1)
+            self.humidity = round(self.hub.get_humidity(), 2)
 
         else:
-            self.temp_in = random.uniform(15, 25)
-            self.temp_out = random.uniform(15, 25)
-            self.humidity = random.uniform(50, 100)
+            self.temp_in = round(random.uniform(15, 25), 1)
+            self.temp_out = round(random.uniform(15, 25), 1)
+            self.humidity = round(random.uniform(50, 100), 2)
 
         print(self.temp_in)
         print(self.temp_out)

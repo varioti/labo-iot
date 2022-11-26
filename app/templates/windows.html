@@ -4,27 +4,28 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/window.css')}}" />
+
 </head>
 <body>
-<div class="">
-    <div>
+<div class="main">
+    <div class="part">
         <h3>Fenêtre</h3>
         {% if is_open %}
             <span id="window_info">La fenêtre est ouverte</span><br>
             <img id="window_img" src= "../static/image/window_open.png" alt="open"/>
-            <a id="open" href="/close/">Fermer</a>
+            <br><a id="open" href="/close/">Fermer</a>
         {% else %}
             <span id="window_info">La fenêtre est fermée</span><br>
             <img id="window_img" src= "../static/image/window_close.png" alt="closed"/>
-            <a id="open" href="/open/">Ouvrir</a>
+            <br><a id="open" href="/open/">Ouvrir</a>
         {% endif %}
 
-        
+        <br>
         <a id="auto" href="/mode/">
             {% if mode_auto %}Désactiver mode auto{% else %}Activer mode auto{% endif %}
         </a>
-    </div>
-    <div>
+
         <table id="measures">
             <tr>
                 <td>Température intérieure : </td>
@@ -44,7 +45,7 @@
             </tr>
         </table>
     </div>
-    <div>
+    <div class="part">
         <h3>Log des actions automatiques</h3>
         <table id="log">
             {% for action in log %}

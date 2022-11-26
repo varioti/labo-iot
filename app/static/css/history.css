@@ -1,4 +1,37 @@
+* {
+    box-sizing: border-box;
+}
+
+.measures_tables {
+    margin-left:-5px;
+    margin-right:-5px;
+}
+
+.part {
+    float: left;
+    width: 20%;
+    padding: 5px;
+}
+
+/* Clearfix (clear floats) */
+.measures_tables::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
 table {
     border-collapse: collapse;
-    display: inline-block;
+    border-spacing: 0;
+    width: 100%;
+    border: 1px solid #ddd;
+}
+
+th, td {
+    text-align: left;
+    padding: 16px;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
 }

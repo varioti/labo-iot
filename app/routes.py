@@ -50,7 +50,7 @@ def energy_behaviour():
     for eid in e.keys():
         sensor = e[eid]
         sensor.make_measure()
-        MeasureConsumption.add_new_measure(sensor.get_amp(), eid)
+        MeasureConsumption.add_new_measure(sensor.get_watt(), eid)
         with scheduler.app.app_context():
             devices_names.append(Devices.query.get(eid).name)
             device_measures = list(MeasureConsumption.query.filter(MeasureConsumption.device_id == eid))
@@ -74,8 +74,8 @@ scheduler.add_job(id='energy', func=energy_behaviour, trigger="interval", second
 ##########
 
 @app.route("/")
-def hello_world():
-    return render_template("index.html")
+def dashboard():
+    return render_template("dashboard.html")
 
 
 @app.route("/window/")

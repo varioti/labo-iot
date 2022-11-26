@@ -26,7 +26,10 @@ function newmeasure(names, measures) {
             cell1.innerHTML = measures[i][j]["datetime"]
             cell2.innerHTML = measures[i][j]["measure"]
         }
-        measures_tables.appendChild(table);
+        let part = document.createElement('div');
+        part.className = "part"
+        part.appendChild(table);
+        measures_tables.appendChild(part);
     }
 
 }
