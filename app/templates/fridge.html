@@ -1,0 +1,60 @@
+{% extends "index.html" %}
+{% block content %}
+
+<body>
+  <div class="col-5">
+    <h4>Conseils Avant Achat</h4>
+    
+        {% if gen_advices is defined and gen_advices|length %}
+        <div class="">
+        
+          {% for advice in gen_advices %}
+
+                {{ advice["advice"]}}<br />
+            
+         {% endfor %}
+        </div>
+      {% endif %}
+
+</div>
+    <div class="col-5">
+        <h4>Astuce</h4>
+        
+            {% if fridge_advices is defined and fridge_advices|length %}
+            <div class="">
+            
+              {% for advice in fridge_advices %}
+
+                    {{ advice["advice"]}}<br />
+                
+             {% endfor %}
+            </div>
+          {% endif %}
+
+    </div>
+    <div class="col-5">
+      <h5>Petite comparaison de consommation</h5>
+        
+            {% if fridge_consumption is defined and fridge_consumption|length %}
+            <table class="table table-striped table-sm">
+              <caption></caption>
+              <tr>
+                <th>N°</th>
+                <th>Consommation</th>
+              </tr>
+  
+              {% for consump in fridge_consumption%}
+                
+                  <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>  {{ consump["advice"]}} </td>
+                  </tr> 
+             {% endfor %}
+            </table>
+          {% endif %}
+
+    </div>
+
+</body>
+
+{% endblock %}
