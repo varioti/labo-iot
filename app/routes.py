@@ -116,6 +116,30 @@ def histo_conso():
     return render_template("histo_conso.html")
 
 
+@app.route("/light/")
+def light_advice():
+
+    light_advices = AdvicesConsumption.query.filter(AdvicesConsumption.type_d.endswith(" Ampoule")).all()
+    return render_template("light.html", light_advices=light_advices)
+
+@app.route("/fridge/")
+def fridge_advice():
+
+    gen_advices =  AdvicesConsumption.query.filter(AdvicesConsumption.type_d.endswith("Achat G")).all()
+    fridge_consumption = AdvicesConsumption.query.filter(AdvicesConsumption.device.endswith("Frigo")).all()
+    fridge_advices = AdvicesConsumption.query.filter(AdvicesConsumption.device.endswith("Frigidaire")).all()
+
+    return render_template("fridge.html", fridge_consumption=fridge_consumption, fridge_advices=fridge_advices,
+                            gen_advices=gen_advices)
+
+@app.route("/dishwasher/")
+def dishwasher_advice():
+
+    gen_advices =  AdvicesConsumption.query.filter(AdvicesConsumption.device.endswith("Achat")).all()
+    dishwasher_advices = AdvicesConsumption.query.filter(AdvicesConsumption.device.endswith("Lave-vaisselle")).all()
+
+    return render_template("dishwasher.html", dishwasher_advices=dishwasher_advices, gen_advices=gen_advices)
+
 
 #######
 # RUN #

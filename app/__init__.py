@@ -1,4 +1,3 @@
-import pytest as pytest
 from flask import Flask
 
 from flask_sqlalchemy import SQLAlchemy
