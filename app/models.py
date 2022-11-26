@@ -136,13 +136,51 @@ with app.app_context():
     Devices.add_new_device(name="Taque de cuisson", description="Taque de cuisson", nb_volt=12, hub_port=3)
 
     AdvicesConsumption.query.delete()
-    AdvicesConsumption.add_new_advice("Consommation", "Pour donner 750 lumens, une ampoule à incandescence a besoin de 60 W", "Ampoule à incandescence")
-    AdvicesConsumption.add_new_advice("Consommation", "Pour donner 750 lumens, une ampoule économique a besoin 12 W ", "Ampoule économique")
-    AdvicesConsumption.add_new_advice("Consommation", "Pour donner 750 lumens une ampoule LED a besoin 6.5 W", "Ampoule LED")
+    AdvicesConsumption.add_new_advice("Consommation Ampoule", "Pour donner 750 lumens, une ampoule à incandescence a besoin de 60 W", "Ampoule à incandescence")
+    AdvicesConsumption.add_new_advice("Consommation Ampoule", "Pour donner 750 lumens, une ampoule économique a besoin 12 W ", "Ampoule économique")
+    AdvicesConsumption.add_new_advice("Consommation Ampoule", "Pour donner 750 lumens une ampoule LED a besoin 6.5 W", "Ampoule LED")
 
-    AdvicesConsumption.add_new_advice("Consommation", "Energie nécessaire pour chauffer 1,5 litre d'eau de 20 à 95°C = 295 Wh", "Gazette")
-    AdvicesConsumption.add_new_advice("Consommation", "Energie nécessaire pour chauffer 1,5 litre d'eau de 20 à 95°C = 162 Wh", "Induction")
-    AdvicesConsumption.add_new_advice("Consommation", "Energie nécessaire pour chauffer 1,5 litre d'eau de 20 à 95°C = 233 Wh", "Vitrocéramique")
-    AdvicesConsumption.add_new_advice("Consommation", "Energie nécessaire pour chauffer 1,5 litre d'eau de 20 à 95°C = 252 Wh", "Fonte")
+    AdvicesConsumption.add_new_advice("Consommation Taque", "Energie nécessaire pour chauffer 1,5 litre d'eau de 20 à 95°C = 295 Wh", "Gazette")
+    AdvicesConsumption.add_new_advice("Consommation Taque", "Energie nécessaire pour chauffer 1,5 litre d'eau de 20 à 95°C = 162 Wh", "Induction")
+    AdvicesConsumption.add_new_advice("Consommation Taque", "Energie nécessaire pour chauffer 1,5 litre d'eau de 20 à 95°C = 233 Wh", "Vitrocéramique")
+    AdvicesConsumption.add_new_advice("Consommation Taque", "Energie nécessaire pour chauffer 1,5 litre d'eau de 20 à 95°C = 252 Wh", "Fonte")
+    AdvicesConsumption.add_new_advice("Consommation Taque", "Les taques à inductions consomment 30 à 40% d'électricité en moins", "Induction")
+
+    AdvicesConsumption.add_new_advice("Consommation", "Un frigidaire-Congélateur A+/304 L consomme 304 kWh par an ==> coût 46,99 € (compteur de 6kVA en option base)", "Frigo")
+    AdvicesConsumption.add_new_advice("Consommation", "Un frigidaire-Congélateur A++/304 L consomme 257 kWh par an ==> coût 39,73 € (compteur de 6kVA en option base)", "Frigo")
+    AdvicesConsumption.add_new_advice("Consommation", "Un frigidaire-Congélateur A+++/304 L consomme 160 kWh par an ==> coût 24,74 € (compteur de 6kVA en option base)", "Frigo")
+
+    AdvicesConsumption.add_new_advice("Astuce", "Pour la cuisson à électricité privilégier les casseroles à fond parfaitement plat", "Cuisson Electrique")
+    AdvicesConsumption.add_new_advice("Astuce", "Pour accéléer la cuissson ou le chauffage de l'eau vous devriez mettre un couvercle. Je geste"
+                                                "peut vous faire économiser 45 €/an.", "Cuisson")
+
+    AdvicesConsumption.add_new_advice("Astuce", "Si on fait une grande quantité de vaisselle mieux vaut utiliser la vaisselle pour économiser de l'eau."
+                                                "Une machine peut laver jusqu’à 160 pièces de vaisselle avec seulement 10 à 12 litres d’eau.", "Lave-vaisselle")
+    AdvicesConsumption.add_new_advice("Astuce", "Si vous devez rincer la vaisselle avant de la mettre dans la machine utiliser, utiliser de l'eau qui "
+                                                "a déjà servi par exemple à laver les légumes ou cuir les pâtes...", "Lave-vaisselle")
+    AdvicesConsumption.add_new_advice("Astuce", "Bien remplir le lave-vaisselle et consulter le mode d’emploi pour connaître la consommation d'eau et d'énergie de chaque programme"
+                                        , "Lave-vaisselle")
+
+    AdvicesConsumption.add_new_advice("Astuce", "Dégivrer le frigidaire peut vous faire économiser de l'argent. Par exemple de 2 mm de givre c'est environ 10 % de consommation"
+                                                " supplémentaire et 5 mm de givre c'est + 30% de consommation.", "Frigidaire")
+    AdvicesConsumption.add_new_advice("Astuce", "Bien choisir l'emplacement de son frigidaire: ne pas le mettre trop près des radiateurs, de la chaudière ou du four puisqu'ils"
+                                                " produisent de la chaleur et auront plus tendances à le faire fonctionner d'avantage.", "Frigidaire")
+    AdvicesConsumption.add_new_advice("Astuce", "Choisir la température adequate pour la conservation afin d'économiser de l'argent. 4-5° pour le réfrigérateur et -18° pour la congélation", "Frigidaire")
+
+    AdvicesConsumption.add_new_advice("Astuce", "Quand on est raccordé au gaz, cuisiner avec ce derneir coûte moitié moins chère que"
+                                                "l'électrique car on utilise le gaz pour se chauffer", "Choix énergie")
+    AdvicesConsumption.add_new_advice("Astuce", "Aérez suffisament votre cuisine si vous utiliser le gaz et utiliser la hotte à chaque cuisson", "Utilisation gaz")
+    AdvicesConsumption.add_new_advice("Astuce", "Si on utilise l'électricité il faut privilégier les taques à induction car elle "
+                                                "consomme 30 à 40 % d’électricité en moins que les taques en fonte ou les vitrocéramiques.", "Choix énergie")
+
+    AdvicesConsumption.add_new_advice("Achat G", "Bien réfléchire à ses habitudes afin de prendre l'appareil le mieux "
+                                                "adapté à ses besoins et à la taille de sa famille", "Achat")
+    AdvicesConsumption.add_new_advice("Achat G", "Le froid alimentaire représente 26% de la facture d'éléctricité d'après EDF.", "Frigo")
+    AdvicesConsumption.add_new_advice("Achat G", "Prendre au serieux l'étiquette d'énergie car entre un modèle A+ et A+++ "
+                                                "la consommation peut varier du simple au double", "Achat")
+
+
+    AdvicesConsumption.add_new_advice("Utilisation", "Pour l'induction utiliser des ustenciles à adaptés (au fond aimanté)", "Induction")
+
 
     MeasureConsumption.query.delete()
