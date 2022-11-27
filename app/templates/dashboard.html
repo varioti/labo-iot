@@ -42,7 +42,7 @@
                                     <div class="col-8">
                                         <div class="numbers">
                                             <p class="text-sm mb-0 text font-weight-bold">Appareils connectés<br></p>
-                                            <h5 class="font-weight-bolder mb-0">5 <br></h5>
+                                            <h5 class="font-weight-bolder mb-0">{{energy["nb_app"]}}<br></h5>
                                         </div>
                                     </div>
                                     <div class="col-4 text-end">
@@ -61,8 +61,7 @@
                                     <div class="col-8">
                                         <div class="numbers">
                                             <p class="text-sm mb-0 text font-weight-bold">Puissance totale en temps réel<br></p>
-                                            <h5 class="font-weight-bolder mb-0">&nbsp;0.5 kW <span class="text-success text-sm font-weight-bolder"></span>
-                                            </h5>
+                                            <h5 class="font-weight-bolder mb-0">{{energy["kw_actual"]}} kW</h5>
                                         </div>
                                     </div>
                                     <div class="col-4 text-end">
@@ -83,9 +82,12 @@
                                     <div class="col-8">
                                         <div class="numbers">
                                             <p class="text-sm mb-0 text font-weight-bold" contenteditable="true">Consommation<br>aujourd'hui<br></p>
-                                            <h5 class="font-weight-bolder mb-0">
-                                                40kWh
-                                                <span class="text-success text-sm font-weight-bolder">+3%</span>
+                                            <h5 class="font-weight-bolder mb-0">{{energy["kw_today"]}}kWh
+                                                {% if energy["pc_today"] >= 0 %}
+                                                    <span class="text-success text-sm font-weight-bolder">+{{energy["pc_today"]}}%</span>
+                                                {% else %}
+                                                    <span class="text-danger text-sm font-weight-bolder">{{energy["pc_today"]}}%</span>
+                                                {% endif %}
                                             </h5>
                                         </div>
                                     </div>
@@ -105,8 +107,12 @@
                                     <div class="col-8">
                                         <div class="numbers">
                                             <p class="text-sm mb-0 text font-weight-bold">Consommation<br>cette semaine</p>
-                                            <h5 class="font-weight-bolder mb-0">&nbsp;200 kWk <span class="text-danger text-sm font-weight-bolder">-2%</span>
-                                            </h5>
+                                            <h5 class="font-weight-bolder mb-0">{{energy["kwh_today"]}} kWh
+                                                {% if energy["pc_week"] >= 0 %}
+                                                    <span class="text-success text-sm font-weight-bolder">+{{energy["pc_week"]}}%</span>
+                                                {% else %}
+                                                    <span class="text-danger text-sm font-weight-bolder">{{energy["pc_week"]}}%</span>
+                                                {% endif %}                                            </h5>
                                         </div>
                                     </div>
                                     <div class="col-4 text-end">
@@ -125,7 +131,12 @@
                                     <div class="col-8">
                                         <div class="numbers">
                                             <p class="text-sm mb-0 text font-weight-bold">Consommation<br>ce mois</p>
-                                            <h5 class="font-weight-bolder mb-0">&nbsp;350 kWh <span class="text-success text-sm font-weight-bolder">+5%</span>
+                                            <h5 class="font-weight-bolder mb-0">{{energy["kwh_month"]}} kWh 
+                                                {% if energy["pc_month"] >= 0 %}
+                                                    <span class="text-success text-sm font-weight-bolder">+{{energy["pc_month"]}}%</span>
+                                                {% else %}
+                                                    <span class="text-danger text-sm font-weight-bolder">{{energy["pc_month"]}}%</span>
+                                                {% endif %}                                               
                                             </h5>
                                         </div>
                                     </div>
@@ -169,13 +180,13 @@
                                 <div class="row">
                                     <div class="col-8">
                                         <div class="numbers">
-                                            <p class="text-sm mb-0 text-capitalize font-weight-bold">Température Pièce<br></p>
-                                            <h5 class="font-weight-bolder mb-0">23.2°C <br></h5>
+                                            <p class="text-sm mb-0 text font-weight-bold">Température pièce<br></p>
+                                            <h5 class="font-weight-bolder mb-0">{{temp_in}}°C <br></h5>
                                         </div>
                                     </div>
                                     <div class="col-4 text-end">
                                         <div class="icon icon-shape shadow text-center border-radius-md bg-dark">
-                                            <i class="ni ni-tv-2 text-lg opacity-10" aria-hidden="true"></i>
+                                            <i class="fa-solid fa-temperature-high"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -188,14 +199,14 @@
                                 <div class="row">
                                     <div class="col-8">
                                         <div class="numbers">
-                                            <p class="text-sm mb-0 text-capitalize font-weight-bold">Température extérieure<br></p>
-                                            <h5 class="font-weight-bolder mb-0">&nbsp;18.5°C <span class="text-success text-sm font-weight-bolder"></span>
+                                            <p class="text-sm mb-0 text font-weight-bold">Température ext<br></p>
+                                            <h5 class="font-weight-bolder mb-0">{{temp_out}}°C <span class="text-success text-sm font-weight-bolder"></span>
                                             </h5>
                                         </div>
                                     </div>
                                     <div class="col-4 text-end">
                                         <div class="icon icon-shape shadow text-center border-radius-md bg-dark">
-                                            <i class="ni ni-world text-lg opacity-10 text-default" aria-hidden="true"></i>
+                                            <i class="fa-solid fa-temperature-high"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -208,14 +219,14 @@
                                 <div class="row">
                                     <div class="col-8">
                                         <div class="numbers">
-                                            <p class="text-sm mb-0 text-capitalize font-weight-bold">Humidité pièce<br></p>
-                                            <h5 class="font-weight-bolder mb-0">&nbsp;65.0 % <span class="text-success text-sm font-weight-bolder"></span>
+                                            <p class="text-sm mb-0 text font-weight-bold">Humidité pièce<br></p>
+                                            <h5 class="font-weight-bolder mb-0">{{hum}} % <span class="text-success text-sm font-weight-bolder"></span>
                                             </h5>
                                         </div>
                                     </div>
                                     <div class="col-4 text-end">
                                         <div class="icon icon-shape shadow text-center border-radius-md bg-dark">
-                                            <i class="ni ni-bulb-61 text-lg opacity-10" aria-hidden="true"></i>
+                                            <i class="fa-solid fa-droplet"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -229,15 +240,20 @@
                             <div class="col-lg-5 ms-auto text-center mt-5 mt-lg-0">
                                 <div class="bg-gradient-primary border-radius-lg h-100">
                                     <div class="position-relative d-flex align-items-center justify-content-center h-100">
-                                        <img class="w-100 position-relative z-index-2 pt-4" src="{{url_for('static', filename='image/window_open.jpg')}}">
+                                        {% if is_open %}
+                                            <img id="window_img" class="w-100 position-relative z-index-2 pt-4" src="{{url_for('static', filename='image/window_open.jpg')}}">
+                                        {% else %}
+                                            <img id="window_img" class="w-100 position-relative z-index-2 pt-4" src="{{url_for('static', filename='image/window_close.jpg')}}">
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="d-flex flex-column h-100">
-                                    <p class="mb-1 pt-2 text-bold"><span>🟢 </span>Auto<br></p>
-                                    <h5 class="font-weight-bolder">Ouverte<br></h5>
-                                    <p class="mb-5">Refroidir et Déshumidifier la pièce<br>Température souhaitée<br></p>
+                                    <p id="auto_info" class="mb-1 pt-2 text-bold">{% if mode_auto %}🟢 Auto{% else %}🔴 Manuelle{% endif %}<br></p>
+                                    <h5 id="open_info" class="font-weight-bolder">{% if is_open %}Ouverte{% else %}Fermée{% endif %}<br></h5>
+                                    <p id="state" class="mb-5">{{state}}</p><br>
+                                    <p id="temp_des" class="mb-5">Température désirée : 20°C</p><br>
                                     <a class="text-body text-sm font-weight-bold mb-0 icon-move-right mt-auto" href="javascript:;">&nbsp;
                                     </a>
                                 </div>
@@ -246,10 +262,14 @@
                     </div>
                 </div>
                 <div class="row removable">
-                    <div class="col-lg-3"><button class="btn mb-4 btn-dark">Fermer</button></div>
-                    <div class="col-lg-3"><button class="btn mb-4 btn-dark">Désactiver</button></div>
-                    <div class="col-lg-3"><button class="btn mb-4 btn-dark">Historique</button></div>
-                    <div class="col-lg-3"><button class="btn mb-4 btn-dark">Paramètres</button></div>
+                    {% if is_open %}
+                        <div class="col-lg-3"><a id="open" href="/close/" class="btn mb-4 btn-dark" style="color: white;">Fermer</a></div>
+                    {% else %}
+                        <div class="col-lg-3"><a id="open" href="/open/" class="btn mb-4 btn-dark" style="color: white;">Ouvrir</a></div>
+                    {% endif %}
+                    <div class="col-lg-3"><a id="auto" href="/mode/" class="btn mb-4 btn-dark" style="color: white;">{% if mode_auto %}Désactiver{% else %}Activer{% endif %}</a></div>
+                    <div class="col-lg-3"><a class="btn mb-4 btn-dark" style="color: white;">Historique</a></div>
+                    <div class="col-lg-3"><a class="btn mb-4 btn-dark" style="color: white;">Paramètres</a></div>
                 </div>
             </div>
         </div>

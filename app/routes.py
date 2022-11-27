@@ -75,7 +75,23 @@ scheduler.add_job(id='energy', func=energy_behaviour, trigger="interval", second
 
 @app.route("/")
 def dashboard():
-    return render_template("dashboard.html")
+    temp_in, temp_out, hum = w.get_measures()
+    current_state = w.repr_state()
+    is_open = w.get_is_open()
+    mode = w.mode_auto
+
+    energy={
+        "nb_app":5,
+        "kw_actual":0.5,
+        "kwh_today":40,
+        "pc_today":4.5,
+        "kwh_week":40,
+        "pc_week":-2,
+        "kwh_month":40,
+        "pc_month":5
+    }
+
+    return render_template("dashboard.html", temp_in=temp_in, temp_out=temp_out, hum=hum, state=current_state, is_open=is_open, mode_auto=mode, energy=energy)
 
 
 @app.route("/window/")

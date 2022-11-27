@@ -9,10 +9,10 @@ import random
 from datetime import datetime
 
 # Window actions
-NOT = "rien"
-HEAT = "chauffer"
-COOL = "refroidir"
-DEHUM = "deshumidifier"
+NOT = "Rien"
+HEAT = "Chauffer"
+COOL = "Refroidir"
+DEHUM = "Déshumidifier"
 
 # Represent the smat window
 class Window:
