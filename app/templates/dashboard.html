@@ -181,7 +181,7 @@
                                     <div class="col-8">
                                         <div class="numbers">
                                             <p class="text-sm mb-0 text font-weight-bold">Température pièce<br></p>
-                                            <h5 class="font-weight-bolder mb-0">{{temp_in}}°C <br></h5>
+                                            <h5 id="temp_in" class="font-weight-bolder mb-0">{{temp_in}}°C <br></h5>
                                         </div>
                                     </div>
                                     <div class="col-4 text-end">
@@ -200,7 +200,7 @@
                                     <div class="col-8">
                                         <div class="numbers">
                                             <p class="text-sm mb-0 text font-weight-bold">Température ext<br></p>
-                                            <h5 class="font-weight-bolder mb-0">{{temp_out}}°C <span class="text-success text-sm font-weight-bolder"></span>
+                                            <h5 id="temp_out" class="font-weight-bolder mb-0">{{temp_out}}°C <span class="text-success text-sm font-weight-bolder"></span>
                                             </h5>
                                         </div>
                                     </div>
@@ -220,7 +220,7 @@
                                     <div class="col-8">
                                         <div class="numbers">
                                             <p class="text-sm mb-0 text font-weight-bold">Humidité pièce<br></p>
-                                            <h5 class="font-weight-bolder mb-0">{{hum}} % <span class="text-success text-sm font-weight-bolder"></span>
+                                            <h5 id="hum" class="font-weight-bolder mb-0">{{hum}} % <span class="text-success text-sm font-weight-bolder"></span>
                                             </h5>
                                         </div>
                                     </div>
@@ -307,7 +307,7 @@
 <script src="https://demos.creative-tim.com/soft-ui-dashboard/assets/js/soft-ui-dashboard.min.js?v=1.0.2"></script>
 
 
-<!--script src="{{url_for('static', filename='js/energy.js')}}"></script-->
+<script src="{{url_for('static', filename='js/energy.js')}}"></script>
 
 </body>
 

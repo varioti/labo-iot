@@ -5,38 +5,46 @@ socket.on("update", update);
 // UPDATE when new measures received //
 ///////////////////////////////////////
 function update(is_open, temp_in, temp_out, hum, current, mode_auto, log) {
-    var window_info = document.getElementById("window_info");
-    var window_img = document.getElementById("window_img");
-    var open_button = document.getElementById("open");
+    // General values    
+    var h_temp_in = document.getElementById("temp_in");
+    var h_temp_out = document.getElementById("temp_out");
+    var h_hum = document.getElementById("hum");
+    var state = document.getElementById("state");
+
+    h_temp_in.innerHTML = temp_in.toFixed(1) + "°C";
+    h_temp_out.innerHTML = temp_out.toFixed(1) + "°C";
+    h_hum.innerHTML = hum.toFixed(2) + "%";
+    state.innerHTML = current;
+
+    // Mode auto of the window
     var auto_button = document.getElementById("auto");
-    var myTable = document.getElementById("measures");
+    var auto_info = document.getElementById("auto_info");
 
     if (mode_auto) {
-        auto_button.innerHTML = "Désactiver mode auto";
-        myTable.rows[3].cells[0].innerHTML = "Action(s) actuelle(s) : ";
+        auto_button.innerHTML = "Désactiver";
+        auto_info.innerHTML = "🟢 Auto";
     } else {
-        auto_button.innerHTML = "Activer mode auto";
-        myTable.rows[3].cells[0].innerHTML = "Conseil(s) :";
+        auto_button.innerHTML = "Activer";
+        auto_info.innerHTML = "🔴 Manuelle";
     }
 
+    // Window open or not
+    var window_info = document.getElementById("open_info");
+    var window_img = document.getElementById("window_img");
+    var open_button = document.getElementById("open");
     if (is_open) {
-        window_info.innerHTML = "La fenêtre est ouverte"
-        window_img.src = "../static/image/window_open.png"
+        window_info.innerHTML = "Ouverte"
+        window_img.src = "../static/image/window_open.jpg"
         window_img.alt = "open"
 
         open_button.innerHTML = "Fermer"
         open_button.href = "/close/"
     } else {
-        window_info.innerHTML = "La fenêtre est fermée"
-        window_img.src = "../static/image/window_close.png"
+        window_info.innerHTML = "Fermée"
+        window_img.src = "../static/image/window_close.jpg"
         window_img.alt = "closed"
 
         open_button.innerHTML = "Ouvrir"
         open_button.href = "/open/"
     }
-
-    myTable.rows[0].cells[1].innerHTML = temp_in.toFixed(1) + " °C";
-    myTable.rows[1].cells[1].innerHTML = temp_out.toFixed(1) + " °C";
-    myTable.rows[2].cells[1].innerHTML = hum.toFixed(2) + " %";
-    myTable.rows[3].cells[1].innerHTML = current;
 }
