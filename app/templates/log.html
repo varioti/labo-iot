@@ -9,7 +9,7 @@
 </head>
 <body>
 <div class="main">
-    <div class="part">
+    <!--div class="part">
         <h3>Fenêtre</h3>
         {% if is_open %}
             <span id="window_info">La fenêtre est ouverte</span><br>
@@ -45,9 +45,9 @@
             </tr>
         </table>
     </div>
-    <div class="part">
+    <div class="part"-->
         <h3>Log des actions automatiques</h3>
-        <table id="log">
+        <table id="window_log">
             {% for action in log %}
             <tr>
                 <td>{{action["datetime"]}}</td>

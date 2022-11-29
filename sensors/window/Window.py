@@ -42,6 +42,14 @@ class Window:
 
             self.humidity = random.uniform(50, 100)
 
+    # Set a new temp desired
+    def set_temp_desired(self, new_value):
+        self.temp_desired = new_value
+
+    # Set a new temp desired
+    def set_max_hum(self, new_value):
+        self.max_hum = new_value
+
     # Open the window (use motor)
     def open(self):
         print("open")
