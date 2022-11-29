@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import render_template, redirect, Flask
 from flask import url_for, request
 import time 
@@ -44,23 +45,38 @@ def window_behaviour():
 
 # Recurrent background action of window
 def energy_behaviour():
+    devices = []
     devices_names = []
     devices_measures = []
 
-    for eid in e.keys():
-        sensor = e[eid]
-        sensor.make_measure()
-        MeasureConsumption.add_new_measure(sensor.get_watt(), eid)
-        with scheduler.app.app_context():
-            devices_names.append(Devices.query.get(eid).name)
-            device_measures = list(MeasureConsumption.query.filter(MeasureConsumption.device_id == eid))
-            devices_measures.append(list(map(lambda x: x.get_serializable_measure(), device_measures)))
+    current_total = 0
+    with scheduler.app.app_context():
+        for eid in e.keys():
+            sensor = e[eid]
+            sensor.make_measure()
+            current_total += sensor.get_watt()/100
+            MeasureConsumption.add_new_measure(sensor.get_watt(), eid)
+            devices.append(Devices.query.get(eid))
 
-    print(devices_names)
-    print(devices_measures)
+        now = datetime.today()
+        begin_day = datetime(now.year, now.month, now.day)
+        nb_hours = (now - begin_day).total_seconds()/3600
+        
+        today_conso = 0 
+        for device in devices:
+            devices_names.append(device.name)
+            # Get total kWh of the device from today 0:00 to now
+            device_today_measure = device.get_between_measures(begin_day, now)
+            device_conso = ((sum(m.measure for m in (device_today_measure)) / len(device_today_measure))/100) * nb_hours
+            today_conso += device_conso
+            print(today_conso)
 
+            # Get all measures from device
+            devices_measures.append(list(map(lambda x: x.get_serializable_measure(), list(device.measures))))
+    print(today_conso)
     # Send info to page
     socketio.emit("newmeasure", (devices_names, devices_measures))
+    socketio.emit("newdashboard", (current_total, round(today_conso, 2)))
     
 
 # Set the reccurent backround action (for window) each 5 sec
@@ -80,6 +96,7 @@ def dashboard():
     is_open = w.get_is_open()
     mode = w.mode_auto
 
+    # Static values
     energy={
         "nb_app":5,
         "kw_actual":0.5,
@@ -110,13 +127,13 @@ def window(state=False):
 def manual_open():
     w.open()
     w.set_manual()
-    return redirect(url_for("window"))
+    return redirect(url_for("dashboard "))
 
 @app.route("/close/")
 def manual_close():
     w.close()
     w.set_manual()
-    return redirect(url_for("window"))
+    return redirect(url_for("dashboard"))
 
 @app.route("/mode/")
 def set_mode():
@@ -125,7 +142,7 @@ def set_mode():
     else :
         w.set_auto()
 
-    return redirect(url_for("window"))
+    return redirect(url_for("dashboard"))
 
 @app.route("/energy_history/")
 def histo_conso():

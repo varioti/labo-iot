@@ -61,7 +61,7 @@
                                     <div class="col-8">
                                         <div class="numbers">
                                             <p class="text-sm mb-0 text font-weight-bold">Puissance totale en temps réel<br></p>
-                                            <h5 class="font-weight-bolder mb-0">{{energy["kw_actual"]}} kW</h5>
+                                            <h5 id="kw_actual" class="font-weight-bolder mb-0">{{energy["kw_actual"]}} kW</h5>
                                         </div>
                                     </div>
                                     <div class="col-4 text-end">
@@ -82,7 +82,7 @@
                                     <div class="col-8">
                                         <div class="numbers">
                                             <p class="text-sm mb-0 text font-weight-bold" contenteditable="true">Consommation<br>aujourd'hui<br></p>
-                                            <h5 class="font-weight-bolder mb-0">{{energy["kw_today"]}}kWh
+                                            <h5 id="kw_today" class="font-weight-bolder mb-0">{{energy["kw_today"]}}kWh
                                                 {% if energy["pc_today"] >= 0 %}
                                                     <span class="text-success text-sm font-weight-bolder">+{{energy["pc_today"]}}%</span>
                                                 {% else %}
@@ -180,7 +180,7 @@
                                 <div class="row">
                                     <div class="col-8">
                                         <div class="numbers">
-                                            <p class="text-sm mb-0 text font-weight-bold">Température pièce<br></p>
+                                            <p class="text-sm mb-0 text font-weight-bold">Température<br>pièce<br></p>
                                             <h5 id="temp_in" class="font-weight-bolder mb-0">{{temp_in}}°C <br></h5>
                                         </div>
                                     </div>
@@ -199,7 +199,7 @@
                                 <div class="row">
                                     <div class="col-8">
                                         <div class="numbers">
-                                            <p class="text-sm mb-0 text font-weight-bold">Température ext<br></p>
+                                            <p class="text-sm mb-0 text font-weight-bold">Température<br>extérieure<br></p>
                                             <h5 id="temp_out" class="font-weight-bolder mb-0">{{temp_out}}°C <span class="text-success text-sm font-weight-bolder"></span>
                                             </h5>
                                         </div>
@@ -219,7 +219,7 @@
                                 <div class="row">
                                     <div class="col-8">
                                         <div class="numbers">
-                                            <p class="text-sm mb-0 text font-weight-bold">Humidité pièce<br></p>
+                                            <p class="text-sm mb-0 text font-weight-bold">Humidité<br>pièce<br></p>
                                             <h5 id="hum" class="font-weight-bolder mb-0">{{hum}} % <span class="text-success text-sm font-weight-bolder"></span>
                                             </h5>
                                         </div>
@@ -238,7 +238,7 @@
                     <div class="card-body p-3">
                         <div class="row">
                             <div class="col-lg-5 ms-auto text-center mt-5 mt-lg-0">
-                                <div class="bg-gradient-primary border-radius-lg h-100">
+                                <div class="border-radius-lg h-100">
                                     <div class="position-relative d-flex align-items-center justify-content-center h-100">
                                         {% if is_open %}
                                             <img id="window_img" class="w-100 position-relative z-index-2 pt-4" src="{{url_for('static', filename='image/window_open.jpg')}}">
@@ -259,55 +259,31 @@
                                 </div>
                             </div>
                         </div>
+                        <br><br>
+                        <div class="row removable">
+                            {% if is_open %}
+                            <div class="col-lg-3"><a id="open" href="/close/" class="btn mb-4 btn-dark" style="color: white;">Fermer</a></div>
+                            {% else %}
+                            <div class="col-lg-3"><a id="open" href="/open/" class="btn mb-4 btn-dark" style="color: white;">Ouvrir</a></div>
+                            {% endif %}
+                            <div class="col-lg-3"><a id="auto" href="/mode/" class="btn mb-4 btn-dark" style="color: white;">{% if mode_auto %}Désactiver{% else %}Activer{% endif %}</a></div>
+                            <div class="col-lg-3"><a class="btn mb-4 btn-dark" style="color: white;">Historique</a></div>
+                            <div class="col-lg-3"><a class="btn mb-4 btn-dark" style="color: white;">Paramètres</a></div>
+                        </div>
                     </div>
-                </div>
-                <div class="row removable">
-                    {% if is_open %}
-                        <div class="col-lg-3"><a id="open" href="/close/" class="btn mb-4 btn-dark" style="color: white;">Fermer</a></div>
-                    {% else %}
-                        <div class="col-lg-3"><a id="open" href="/open/" class="btn mb-4 btn-dark" style="color: white;">Ouvrir</a></div>
-                    {% endif %}
-                    <div class="col-lg-3"><a id="auto" href="/mode/" class="btn mb-4 btn-dark" style="color: white;">{% if mode_auto %}Désactiver{% else %}Activer{% endif %}</a></div>
-                    <div class="col-lg-3"><a class="btn mb-4 btn-dark" style="color: white;">Historique</a></div>
-                    <div class="col-lg-3"><a class="btn mb-4 btn-dark" style="color: white;">Paramètres</a></div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Source: https://codepen.io/Nossandra/pen/dONeEJ
-<div class='container'>
-    <div class='card temp'>
-        <div class='inner'>
-        <div class='icon'></div>
-        <div class='title'>
-            <div class='text'>Température intérieure</div>
-        </div>
-        <div class='number'>19</div>
-        <div class='measure'>°C</div>
-        </div>
-    </div>
-    <div class='card energy'>
-        <div class='inner'>
-        <div class='icon'></div>
-        <div class='title'>
-            <div class='text'>Consommation totale aujourd'hui</div>
-        </div>
-        <div class='number'>45</div>
-        <div class='measure'>kWh</div>
-        </div>
-    </div>
-</div>-->
       
 <script src="https://demos.creative-tim.com/soft-ui-dashboard/assets/js/core/popper.min.js"></script>
 <script src="https://demos.creative-tim.com/soft-ui-dashboard/assets/js/core/bootstrap.min.js"></script>
-<script src="https://demos.creative-tim.com/soft-ui-dashboard/assets/js/plugins/chartjs.min.js"></script>
-<script src="https://demos.creative-tim.com/soft-ui-dashboard/assets/js/plugins/Chart.extension.js"></script>
 <script src="https://demos.creative-tim.com/soft-ui-dashboard/assets/js/soft-ui-dashboard.min.js?v=1.0.2"></script>
 
-
-<script src="{{url_for('static', filename='js/energy.js')}}"></script>
+<script src="{{url_for('static', filename='js/window.js')}}"></script>
+<script src="{{url_for('static', filename='js/dashboard.js')}}"></script>
 
 </body>
 

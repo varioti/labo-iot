@@ -57,6 +57,25 @@ class Devices(db.Model):
     hub_port = db.Column(db.Integer, nullable=False)
     description = db.Column(db.Text, nullable=False)
 
+    measures = db.relationship("MeasureConsumption", overlaps="measures")
+
+    def get_between_measures(self, start, end):
+        """day_consumption = 0
+        begin = datetime.datetime(date.year, date.month, date.day)
+        print(begin) 
+        print(date)
+        with app.app_context():
+            mesures = list(MeasureConsumption.query.filter(MeasureConsumption.datetime.between(begin, date)))
+            for m in mesures"""
+        device_measures = self.measures
+        between_measures = []
+        for measure in list(device_measures):
+            if start <= measure.datetime <= end:
+                between_measures.append(measure)
+
+        return between_measures
+
+
     def add_new_device(name, description, nb_volt=12, hub_port=0):
         """
         Add a new device
@@ -82,7 +101,7 @@ class MeasureConsumption(db.Model):
     device_id = db.Column(db.Integer, db.ForeignKey("devices.id"))
     device = db.relationship("Devices", backref=db.backref("deviceI", lazy=True))
 
-    def add_new_measure(m, did):
+    def add_new_measure(m, did, date = None):
         """
         Add a new device
 
@@ -90,8 +109,11 @@ class MeasureConsumption(db.Model):
         measure: name of the device (string)
         device_id: description of the device (string)
         """
+        if date is None:
+            date=datetime.today()
+
         with app.app_context():
-            new_measure = MeasureConsumption(measure=m, datetime=datetime.today(), device_id=did)
+            new_measure = MeasureConsumption(measure=m, datetime=date, device_id=did)
             db.session.add(new_measure)
             db.session.commit()
 
@@ -181,6 +203,5 @@ with app.app_context():
 
 
     AdvicesConsumption.add_new_advice("Utilisation", "Pour l'induction utiliser des ustenciles à adaptés (au fond aimanté)", "Induction")
-
 
     MeasureConsumption.query.delete()
