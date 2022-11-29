@@ -1,0 +1,30 @@
+{% extends "index.html" %}
+{% block content %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/window.css')}}" />
+
+</head>
+<body>
+<div class="main" style="text-align: center;">
+    <h1>Paramètres de la fenêtre</h1>
+    <br>
+    <h3>Température désirée</h3>
+    <form action="/update/temperature/" method="GET">
+        <input type="number" id="temp" step="0.1" name="temp" value="{{temp}}">
+        <button class="btn btn-primary" value="Search" type="submit">Update</button>
+    </form>
+
+    <br>
+    <h3>Humidité max désirée</h3>
+    <form action="/update/humidity/" method="GET">
+        <input type="number" id="hum" step="0.01" min="0" max="100" name="hum" value="{{max_hum}}">
+        <button class="btn btn-primary" value="Search" type="submit">Update</button>
+    </form>
+</div>
+
+</body>
+
+{% endblock %}

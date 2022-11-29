@@ -41,7 +41,8 @@ def window_behaviour():
     mode = w.mode_auto
 
     # Send info to page
-    socketio.emit("update", (is_open, temp_in, temp_out, hum, current_state, mode, log))
+    socketio.emit("update", (is_open, temp_in, temp_out, hum, current_state, mode))
+    socketio.emit("updatelog", (log))
 
 # Recurrent background action of window
 def energy_behaviour():
@@ -108,20 +109,15 @@ def dashboard():
         "pc_month":5
     }
 
-    return render_template("dashboard.html", temp_in=temp_in, temp_out=temp_out, hum=hum, state=current_state, is_open=is_open, mode_auto=mode, energy=energy)
+    return render_template("dashboard.html", temp_in=temp_in, temp_out=temp_out, temp_desired=w.temp_desired, hum=hum, state=current_state, is_open=is_open, mode_auto=mode, energy=energy)
 
 
 @app.route("/window/")
-def window(state=False):
-    temp_in, temp_out, hum = w.get_measures()
-    current_state = w.repr_state()
-    is_open = w.get_is_open()
-    mode = w.mode_auto
-
+def window():
     with app.app_context():
         log = list(map(lambda x: x.get_serializable_action(), list(WindowLog.query.all())))
 
-    return render_template("windows.html", temp_in=temp_in, temp_out=temp_out, hum=hum, state=current_state, is_open=is_open, mode_auto=mode, log=log)
+    return render_template("log.html", log=log)
 
 @app.route("/open/")
 def manual_open():
@@ -133,6 +129,30 @@ def manual_open():
 def manual_close():
     w.close()
     w.set_manual()
+    return redirect(url_for("dashboard"))
+
+@app.route("/update/")
+def update():
+    return render_template("parameters.html", temp=w.temp_desired, max_hum=w.max_hum)
+
+@app.route("/update/temperature/")
+def update_temp():
+    if request.args.get("temp", None):
+        try:
+            w.set_temp_desired(float(request.args["temp"]))
+        except:
+            pass
+
+    return redirect(url_for("dashboard"))
+
+@app.route("/update/humidity/")
+def update_hum():
+    if request.args.get("hum", None):
+        try:
+            w.set_max_hum(float(request.args["hum"]))
+        except:
+            pass
+
     return redirect(url_for("dashboard"))
 
 @app.route("/mode/")

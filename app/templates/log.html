@@ -1,0 +1,28 @@
+{% extends "index.html" %}
+{% block content %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/window.css')}}" />
+
+</head>
+<body>
+<div class="main">
+        <h3 style="text-align: center;">Historique des actions automatiques de la fenêtre</h3>
+        <table id="window_log">
+            {% for action in log %}
+            <tr>
+                <td>{{action["datetime"]}}</td>
+                <td>{{action["action"]}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+<script src="{{url_for('static', filename='js/window_log.js')}}"></script>
+
+</body>
+
+{% endblock %}
