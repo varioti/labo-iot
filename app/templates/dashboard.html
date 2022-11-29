@@ -252,8 +252,8 @@
                                 <div class="d-flex flex-column h-100">
                                     <p id="auto_info" class="mb-1 pt-2 text-bold">{% if mode_auto %}🟢 Auto{% else %}🔴 Manuelle{% endif %}<br></p>
                                     <h5 id="open_info" class="font-weight-bolder">{% if is_open %}Ouverte{% else %}Fermée{% endif %}<br></h5>
-                                    <p id="state" class="mb-5">{{state}}</p><br>
-                                    <p id="temp_des" class="mb-5">Température désirée : 20°C</p><br>
+                                    <p id="state" class="mb-1 pt-2 text-bold">{{state}}</p><br>
+                                    <p id="temp_des" class="mb-5">Température désirée : {{temp_desired}}°C</p><br>
                                     <a class="text-body text-sm font-weight-bold mb-0 icon-move-right mt-auto" href="javascript:;">&nbsp;
                                     </a>
                                 </div>
@@ -268,8 +268,8 @@
                         <div class="col-lg-3"><a id="open" href="/open/" class="btn mb-4 btn-dark" style="color: white;">Ouvrir</a></div>
                     {% endif %}
                     <div class="col-lg-3"><a id="auto" href="/mode/" class="btn mb-4 btn-dark" style="color: white;">{% if mode_auto %}Désactiver{% else %}Activer{% endif %}</a></div>
-                    <div class="col-lg-3"><a class="btn mb-4 btn-dark" style="color: white;">Historique</a></div>
-                    <div class="col-lg-3"><a class="btn mb-4 btn-dark" style="color: white;">Paramètres</a></div>
+                    <div class="col-lg-3"><a class="btn mb-4 btn-dark" href="/window/" style="color: white;">Historique</a></div>
+                    <div class="col-lg-3"><a class="btn mb-4 btn-dark" href="/update/" style="color: white;">Paramètres</a></div>
                 </div>
             </div>
         </div>

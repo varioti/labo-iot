@@ -92,7 +92,7 @@ def dashboard():
         "pc_month":5
     }
 
-    return render_template("dashboard.html", temp_in=temp_in, temp_out=temp_out, hum=hum, state=current_state, is_open=is_open, mode_auto=mode, energy=energy)
+    return render_template("dashboard.html", temp_in=temp_in, temp_out=temp_out, temp_desired=w.temp_desired, hum=hum, state=current_state, is_open=is_open, mode_auto=mode, energy=energy)
 
 
 @app.route("/window/")
@@ -114,25 +114,29 @@ def manual_close():
     w.set_manual()
     return redirect(url_for("window"))
 
-@app.route("/update/temp")
+@app.route("/update/")
+def update():
+    return render_template("parameters.html", temp=w.temp_desired, max_hum=w.max_hum)
+
+@app.route("/update/temperature/")
 def update_temp():
     if request.args.get("temp", None):
         try:
-            w.set_temp_desired(int(request.args["temp"]))
+            w.set_temp_desired(float(request.args["temp"]))
         except:
             pass
 
-    return redirect(dashboard)
+    return redirect(url_for("dashboard"))
 
-@app.route("/update/hum")
+@app.route("/update/humidity/")
 def update_hum():
     if request.args.get("hum", None):
         try:
-            w.set_max_hum(int(request.args["hum"]))
+            w.set_max_hum(float(request.args["hum"]))
         except:
             pass
 
-    return redirect(dashboard)
+    return redirect(url_for("dashboard"))
 
 @app.route("/mode/")
 def set_mode():

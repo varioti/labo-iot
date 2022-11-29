@@ -1,6 +1,4 @@
-const socket = io();
 socket.on("update", update);
-socket.on("updatelog", updatelog);
 
 ///////////////////////////////////////
 // UPDATE when new measures received //
@@ -40,24 +38,4 @@ function update(is_open, temp_in, temp_out, hum, current, mode_auto) {
     myTable.rows[1].cells[1].innerHTML = temp_out.toFixed(1) + " °C";
     myTable.rows[2].cells[1].innerHTML = hum.toFixed(2) + " %";
     myTable.rows[3].cells[1].innerHTML = current;
-}
-
-
-/////////////////////////////////
-// UPDATE log of action table  //
-/////////////////////////////////
-function updatelog(log) {
-    var window_log = document.getElementById("window_log");
-
-    while (window_log.firstChild) {
-        window_log.removeChild(window_log.lastChild);
-    }
-
-    for (let j=0; j < log.length; j++) {
-        let row = table.insertRow(0);
-        let cell1 = row.insertCell(0);
-        let cell2 = row.insertCell(1);
-        cell1.innerHTML = log[j]["datetime"]
-        cell2.innerHTML = log[j]["action"]
-    }
 }
