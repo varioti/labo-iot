@@ -1,6 +1,40 @@
 .img-container {
-  text-align: center;
+    position: relative;
+    background-color: white;
+    border-radius: 25px;
+    padding: 15px 15px;
 }
 
+/* Bottom right text */
+.text-block {
+  border-radius: 25px;
+  position: absolute;
+  top: 20px;
+  left: 400px;
+  cursor: pointer;
+  background-color: rgba(52, 71, 103);
+  color: white;
+  font-size: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+} 
+
+.text-block .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+}
+
+.text-block:hover .tooltiptext {
+  visibility: visible;
+}
 
 h1 {text-align: center;}
