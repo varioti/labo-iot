@@ -99,7 +99,7 @@ class MeasureConsumption(db.Model):
     datetime = db.Column(db.DateTime, nullable=False)
 
     device_id = db.Column(db.Integer, db.ForeignKey("devices.id"))
-    device = db.relationship("Devices", backref=db.backref("deviceI", lazy=True))
+    device = db.relationship("Devices", backref=db.backref("deviceI", lazy=True), overlaps="measures")
 
     def add_new_measure(m, did, date = None):
         """

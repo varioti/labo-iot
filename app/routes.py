@@ -26,7 +26,7 @@ print(devices)
 
 e = {}
 for device in devices:
-    e[device.id] = Energy(hub_port= device.hub_port,nb_volt= device.nb_volt, simulate=True) # Set simulate to True if phidgets not plugged
+    e[device.name] = Energy(hub_port= device.hub_port,nb_volt= device.nb_volt, simulate=True) # Set simulate to True if phidgets not plugged
 
 # Recurrent background action of window
 def window_behaviour():
@@ -56,8 +56,9 @@ def energy_behaviour():
             sensor = e[eid]
             sensor.make_measure()
             current_total += sensor.get_watt()/100
-            MeasureConsumption.add_new_measure(sensor.get_watt(), eid)
-            devices.append(Devices.query.get(eid))
+            device = Devices.query.filter(Devices.name == eid).first()
+            MeasureConsumption.add_new_measure(sensor.get_watt(), device.id)
+            devices.append(device)
 
         now = datetime.today()
         begin_day = datetime(now.year, now.month, now.day)
@@ -68,13 +69,13 @@ def energy_behaviour():
             devices_names.append(device.name)
             # Get total kWh of the device from today 0:00 to now
             device_today_measure = device.get_between_measures(begin_day, now)
+            nb_hours = (device_today_measure[-1].datetime - device_today_measure[0].datetime).total_seconds()/3600 #nb hours between first measure of the day and last
             device_conso = ((sum(m.measure for m in (device_today_measure)) / len(device_today_measure))/100) * nb_hours
             today_conso += device_conso
-            print(today_conso)
 
             # Get all measures from device
             devices_measures.append(list(map(lambda x: x.get_serializable_measure(), list(device.measures))))
-    print(today_conso)
+    
     # Send info to page
     socketio.emit("newmeasure", (devices_names, devices_measures))
     socketio.emit("newdashboard", (current_total, round(today_conso, 2)))
@@ -109,7 +110,13 @@ def dashboard():
         "pc_month":5
     }
 
-    return render_template("dashboard.html", temp_in=temp_in, temp_out=temp_out, temp_desired=w.temp_desired, hum=hum, state=current_state, is_open=is_open, mode_auto=mode, energy=energy)
+    devices_conso={}
+    for key in e.keys():
+        e[key].make_measure()
+        devices_conso[key] = e[key].get_watt()
+
+    return render_template("dashboard.html", temp_in=temp_in, temp_out=temp_out, temp_desired=w.temp_desired, hum=hum, state=current_state, is_open=is_open, mode_auto=mode, 
+                                             energy=energy, devices_conso=devices_conso)
 
 
 @app.route("/window/")

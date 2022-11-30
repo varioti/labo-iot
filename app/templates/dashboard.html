@@ -83,10 +83,10 @@
                                         <div class="numbers">
                                             <p class="text-sm mb-0 text font-weight-bold" contenteditable="true">Consommation<br>aujourd'hui<br></p>
                                             <h5 id="kw_today" class="font-weight-bolder mb-0">{{energy["kw_today"]}}kWh
-                                                {% if energy["pc_today"] >= 0 %}
-                                                    <span class="text-success text-sm font-weight-bolder">+{{energy["pc_today"]}}%</span>
+                                                {% if energy["pc_today"] < 0 %}
+                                                    <span class="text-success text-sm font-weight-bolder">{{energy["pc_today"]}}%</span>
                                                 {% else %}
-                                                    <span class="text-danger text-sm font-weight-bolder">{{energy["pc_today"]}}%</span>
+                                                    <span class="text-danger text-sm font-weight-bolder">+{{energy["pc_today"]}}%</span>
                                                 {% endif %}
                                             </h5>
                                         </div>
@@ -108,10 +108,10 @@
                                         <div class="numbers">
                                             <p class="text-sm mb-0 text font-weight-bold">Consommation<br>cette semaine</p>
                                             <h5 class="font-weight-bolder mb-0">{{energy["kwh_today"]}} kWh
-                                                {% if energy["pc_week"] >= 0 %}
-                                                    <span class="text-success text-sm font-weight-bolder">+{{energy["pc_week"]}}%</span>
+                                                {% if energy["pc_week"] < 0 %}
+                                                    <span class="text-success text-sm font-weight-bolder">{{energy["pc_week"]}}%</span>
                                                 {% else %}
-                                                    <span class="text-danger text-sm font-weight-bolder">{{energy["pc_week"]}}%</span>
+                                                    <span class="text-danger text-sm font-weight-bolder">+{{energy["pc_week"]}}%</span>
                                                 {% endif %}                                            </h5>
                                         </div>
                                     </div>
@@ -132,10 +132,10 @@
                                         <div class="numbers">
                                             <p class="text-sm mb-0 text font-weight-bold">Consommation<br>ce mois</p>
                                             <h5 class="font-weight-bolder mb-0">{{energy["kwh_month"]}} kWh 
-                                                {% if energy["pc_month"] >= 0 %}
-                                                    <span class="text-success text-sm font-weight-bolder">+{{energy["pc_month"]}}%</span>
+                                                {% if energy["pc_month"] < 0 %}
+                                                    <span class="text-success text-sm font-weight-bolder">{{energy["pc_month"]}}%</span>
                                                 {% else %}
-                                                    <span class="text-danger text-sm font-weight-bolder">{{energy["pc_month"]}}%</span>
+                                                    <span class="text-danger text-sm font-weight-bolder">+{{energy["pc_month"]}}%</span>
                                                 {% endif %}                                               
                                             </h5>
                                         </div>
@@ -156,8 +156,12 @@
             <div class="img-container">
                 <img src="{{url_for('static', filename='image/cuisine.png')}}"/>
                 <div class="text-block" id="frigo">
-                    <a>24 kW</a>
+                    <a>{{devices_conso["Frigo"]}} W</a>
                     <span class="tooltiptext">Frigo</span>
+                </div>
+                <div class="text-block" id="hob">
+                    <a>{{devices_conso["Taque de cuisson"]}} W</a>
+                    <span class="tooltiptext">Taque de cuisson</span>
                 </div>
             </div>
         </div>
@@ -258,6 +262,7 @@
                                     <p id="auto_info" class="mb-1 pt-2 text-bold">{% if mode_auto %}🟢 Auto{% else %}🔴 Manuelle{% endif %}<br></p>
                                     <h5 id="open_info" class="font-weight-bolder">{% if is_open %}Ouverte{% else %}Fermée{% endif %}<br></h5>
                                     <p id="state" class="mb-1 pt-2 text-bold">{{state}}</p><br>
+                                    <p id="reason" class="mb-5"></p><br>
                                     <p id="temp_des" class="mb-5">Température désirée : {{temp_desired}}°C</p><br>
                                     <a class="text-body text-sm font-weight-bold mb-0 icon-move-right mt-auto" href="javascript:;">&nbsp;
                                     </a>
@@ -267,29 +272,16 @@
                         <br><br>
                         <div class="row removable">
                             {% if is_open %}
-                            <div class="col-lg-3"><a id="open" href="/close/" class="btn mb-4 btn-dark" style="color: white;">Fermer</a></div>
+                                <div class="col-lg-3"><a id="open" href="/close/" class="btn mb-4 btn-dark" style="color: white;">Fermer</a></div>
                             {% else %}
-                            <div class="col-lg-3"><a id="open" href="/open/" class="btn mb-4 btn-dark" style="color: white;">Ouvrir</a></div>
+                                <div class="col-lg-3"><a id="open" href="/open/" class="btn mb-4 btn-dark" style="color: white;">Ouvrir</a></div>
                             {% endif %}
                             <div class="col-lg-3"><a id="auto" href="/mode/" class="btn mb-4 btn-dark" style="color: white;">{% if mode_auto %}Désactiver{% else %}Activer{% endif %}</a></div>
-                            <div class="col-lg-3"><a class="btn mb-4 btn-dark" style="color: white;">Historique</a></div>
-                            <div class="col-lg-3"><a class="btn mb-4 btn-dark" style="color: white;">Paramètres</a></div>
+                            <div class="col-lg-3"><a class="btn mb-4 btn-dark" href="/window/" style="color: white;">Historique</a></div>
+                            <div class="col-lg-3"><a class="btn mb-4 btn-dark" href="/update/" style="color: white;">Paramètres</a></div>
                         </div>
                     </div>
                 </div>
-<<<<<<< HEAD:app/templates/dashboard.html
-=======
-                <div class="row removable">
-                    {% if is_open %}
-                        <div class="col-lg-3"><a id="open" href="/close/" class="btn mb-4 btn-dark" style="color: white;">Fermer</a></div>
-                    {% else %}
-                        <div class="col-lg-3"><a id="open" href="/open/" class="btn mb-4 btn-dark" style="color: white;">Ouvrir</a></div>
-                    {% endif %}
-                    <div class="col-lg-3"><a id="auto" href="/mode/" class="btn mb-4 btn-dark" style="color: white;">{% if mode_auto %}Désactiver{% else %}Activer{% endif %}</a></div>
-                    <div class="col-lg-3"><a class="btn mb-4 btn-dark" href="/window/" style="color: white;">Historique</a></div>
-                    <div class="col-lg-3"><a class="btn mb-4 btn-dark" href="/update/" style="color: white;">Paramètres</a></div>
-                </div>
->>>>>>> window_complete:app/templates/dashboard2.html
             </div>
         </div>
     </div>
