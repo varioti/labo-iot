@@ -20,6 +20,7 @@
 
 
 <div class="main">
+    <!-- CONSO PART-->
     <div class="part">
         <h1>Consommation énergétique</h1>
         <div class="main-content" id="panel">
@@ -155,18 +156,23 @@
         <div class="container">
             <div class="img-container">
                 <img src="{{url_for('static', filename='image/cuisine.png')}}"/>
-                <div class="text-block" id="frigo">
-                    <a>{{devices_conso["Frigo"]}} W</a>
-                    <span class="tooltiptext">Frigo</span>
-                </div>
-                <div class="text-block" id="hob">
-                    <a>{{devices_conso["Taque de cuisson"]}} W</a>
-                    <span class="tooltiptext">Taque de cuisson</span>
-                </div>
+                <a href="/fridge_advice/">
+                    <div class="text-block" id="frigo">
+                        <p style="font-size: 20px;margin: auto;">{{devices_conso["Frigo"]}} W</p>
+                        <span class="tooltiptext">Frigo</span>
+                    </div>
+                </a>
+                <a href="/hob_advice/"></a>
+                    <div class="text-block" id="hob">
+                        <p style="font-size: 20px;margin: auto;">{{devices_conso["Taque de cuisson"]}} W</a>
+                        <span class="tooltiptext">Taque de cuisson</span>
+                    </div>
+                </a>
             </div>
         </div>
     </div>
 
+    <!-- WINDOW PART-->
     <div class="part">
         <h1>Fenêtre</h1>
 
