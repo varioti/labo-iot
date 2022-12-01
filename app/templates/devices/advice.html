@@ -1,0 +1,197 @@
+{% extends "index.html" %}
+{% block content %}
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://demos.creative-tim.com/soft-ui-dashboard/assets/css/nucleo-icons.css">
+  <link rel="stylesheet" href="https://demos.creative-tim.com/soft-ui-dashboard/assets/css/nucleo-svg.css">
+  <link rel="stylesheet" href="https://demos.creative-tim.com/soft-ui-dashboard/assets/css/soft-ui-dashboard.min.css?v=1.0.2">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
+  <link rel="stylesheet" href="./assets/css/loopple/loopple.css">
+  
+  <link rel="stylesheet" href="{{url_for('static', filename='css/slidesshow.css')}}" />
+
+</head>
+
+<body class="g-sidenav-show">
+
+  <div class="container-fluid pt-3 drop-zone">
+    <div class="row removable">
+      <div class="col-lg-3">
+          <div class="card mb-4">
+              <div class="card-body p-3">
+                  <div class="row">
+                      <div class="col-8">
+                          <div class="numbers">
+                              <p class="text-sm mb-0 text font-weight-bold">Puissance en temps réel<br></p>
+                              <h5 class="font-weight-bolder mb-0">36 W<br></h5>
+                          </div>
+                      </div>
+                      <div class="col-4 text-end">
+                          <div class="icon icon-shape shadow text-center border-radius-md bg-dark">
+                              <i class="ni ni-tv-2 text-lg opacity-10" aria-hidden="true"></i>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="col-lg-3">
+          <div class="card mb-4">
+              <div class="card-body p-3">
+                  <div class="row">
+                      <div class="col-8">
+                          <div class="numbers">
+                              <p class="text-sm mb-0 text font-weight-bold">Consommation aujourd'hui<br></p>
+                              <h5 id="kw_actual" class="font-weight-bolder mb-0">5 kWh</h5>
+                          </div>
+                      </div>
+                      <div class="col-4 text-end">
+                          <div class="icon icon-shape shadow text-center border-radius-md bg-dark">
+                              <i class="ni ni-bulb-61 text-lg opacity-10" aria-hidden="true"></i>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="col-lg-3">
+        <div class="card mb-4">
+            <div class="card-body p-3">
+                <div class="row">
+                    <div class="col-8">
+                        <div class="numbers">
+                            <p class="text-sm mb-0 text font-weight-bold">Consommation cette semaine<br></p>
+                            <h5 id="kw_actual" class="font-weight-bolder mb-0">5 kW</h5>
+                        </div>
+                    </div>
+                    <div class="col-4 text-end">
+                        <div class="icon icon-shape shadow text-center border-radius-md bg-dark">
+                            <i class="ni ni-bulb-61 text-lg opacity-10" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <div class="card mb-4">
+          <div class="card-body p-3">
+              <div class="row">
+                  <div class="col-8">
+                      <div class="numbers">
+                          <p class="text-sm mb-0 text font-weight-bold">Consommation ce mois<br></p>
+                          <h5 id="kw_actual" class="font-weight-bolder mb-0">5 kW</h5>
+                      </div>
+                  </div>
+                  <div class="col-4 text-end">
+                      <div class="icon icon-shape shadow text-center border-radius-md bg-dark">
+                          <i class="ni ni-bulb-61 text-lg opacity-10" aria-hidden="true"></i>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
+
+    <div class="row removable" style="text-align: center;">
+        <div class="col-lg-8 drop-zone">
+            <h4>{{header}}</h4>
+            <div id="chart" class="chart" style="width:95%; margin-left: auto; margin-right: auto;"></div>
+        </div>
+        <div class="col-lg-4 drop-zone">
+            <!-- SlideS -->
+            <div class="slideshow-container">
+                {% if consumption is defined and consumption|length %}
+                <!-- Slide -->
+                <div class="mySlides">
+                    <h4>Comparaison conso</h4>
+                    <br>    
+                        <ul style="text-align: left;">
+                        {% for consump in consumption%}
+                            <li>  {{ consump["advice"]}} </li>
+                        {% endfor %}
+                        </ul>
+                    
+                </div>
+                {% endif %}
+                {% if advices is defined and advices|length %}
+                <!-- Slide -->
+                <div class="mySlides">
+                    <h4>Astuces</h4>
+                    <br>
+                    <ul style="text-align: left;">
+                    
+                    {% for advice in advices %}
+
+                            <li>{{ advice["advice"]}}</li>
+                        
+                    {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+                {% if gen_advices is defined and gen_advices|length %}
+                <!-- Slide -->
+                <div class="mySlides">
+                    <h4>Conseils pour l'achat</h4>
+                    <br>
+                    <ul style="text-align: left;">
+
+                    {% for advice in gen_advices %}
+
+                        <li>{{ advice["advice"]}}</li>
+                    
+                    {% endfor %}
+                    </ul>
+                    
+                </div>
+                {% endif %}
+                <!-- Next and previous buttons -->
+                <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                <a class="next" onclick="plusSlides(1)">&#10095;</a>
+            </div>
+        </div>
+    </div>
+  </div>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script type="text/javascript">
+    let graphs = {{graphJSON | safe}};
+    Plotly.plot('chart',graphs,{});
+  </script>
+  <script src="https://demos.creative-tim.com/soft-ui-dashboard/assets/js/core/popper.min.js"></script>
+  <script src="https://demos.creative-tim.com/soft-ui-dashboard/assets/js/core/bootstrap.min.js"></script>
+  <script src="https://demos.creative-tim.com/soft-ui-dashboard/assets/js/soft-ui-dashboard.min.js?v=1.0.2"></script>
+  <script>
+    let slideIndex = 1;
+    showSlides(slideIndex);
+    
+    function plusSlides(n) {
+      showSlides(slideIndex += n);
+    }
+    
+    function currentSlide(n) {
+      showSlides(slideIndex = n);
+    }
+    
+    function showSlides(n) {
+      let i;
+      let slides = document.getElementsByClassName("mySlides");
+      let dots = document.getElementsByClassName("dot");
+      if (n > slides.length) {slideIndex = 1}    
+      if (n < 1) {slideIndex = slides.length}
+      for (i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";  
+      }
+      for (i = 0; i < dots.length; i++) {
+        dots[i].className = dots[i].className.replace(" active", "");
+      }
+      slides[slideIndex-1].style.display = "block";  
+      dots[slideIndex-1].className += " active";
+    }
+    </script>
+</body>
+
+{% endblock %}

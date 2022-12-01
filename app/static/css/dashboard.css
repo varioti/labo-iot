@@ -27,6 +27,21 @@
   left: 100px;
 }
 
+#dishwasher {
+  top: 45px;
+  left: 100px;
+}
+
+#light {
+  top: 250px;
+  left: 250px;
+}
+
+#boil {
+  top: 300px;
+  left: 300px;
+}
+
 .text-block .tooltiptext {
   visibility: hidden;
   width: 120px;

@@ -156,16 +156,34 @@
         <div class="container">
             <div class="img-container">
                 <img src="{{url_for('static', filename='image/cuisine.png')}}"/>
-                <a href="/fridge_advice/">
+                <a href="/fridge/">
                     <div class="text-block" id="frigo">
                         <p style="font-size: 20px;margin: auto;">{{devices_conso["Frigo"]}} W</p>
                         <span class="tooltiptext">Frigo</span>
                     </div>
                 </a>
-                <a href="/hob_advice/"></a>
+                <a href="/hob/">
                     <div class="text-block" id="hob">
-                        <p style="font-size: 20px;margin: auto;">{{devices_conso["Taque de cuisson"]}} W</a>
+                        <p style="font-size: 20px;margin: auto;">{{devices_conso["Taque de cuisson"]}} W</p>
                         <span class="tooltiptext">Taque de cuisson</span>
+                    </div>
+                </a>
+                <a href="/dishwasher/">
+                    <div class="text-block" id="dishwasher">
+                        <p style="font-size: 20px;margin: auto;">{{devices_conso["Lave-vaisselle"]}} W</p>
+                        <span class="tooltiptext">Lave-vaisselle</span>
+                    </div>
+                </a>
+                <a href="/light/">
+                    <div class="text-block" id="light">
+                        <p style="font-size: 20px;margin: auto;">{{devices_conso["Lampe"]}} W</p>
+                        <span class="tooltiptext">Lampes</span>
+                    </div>
+                </a>
+                <a href="/boil/">
+                    <div class="text-block" id="boil">
+                        <p style="font-size: 20px;margin: auto;">{{devices_conso["Bouilloire"]}} W</p>
+                        <span class="tooltiptext">Bouilloire</span>
                     </div>
                 </a>
             </div>

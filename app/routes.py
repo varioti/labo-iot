@@ -188,14 +188,28 @@ def histo_conso():
     return render_template("histo_conso.html")
 
 # Informations about light page
-@app.route("/light_advice/")
+@app.route("/light/")
 def light_advice():
 
     light_advices = AdvicesConsumption.query.filter(AdvicesConsumption.type_d.endswith(" Ampoule")).all()
-    return render_template("devices/light_advice.html", light_advices=light_advices)
+
+    light = Devices.query.filter(Devices.name == "Lampe").first()
+    df = pd.DataFrame({
+            "Temps": [x.datetime for x in light.measures],
+            "Puissance": [x.measure for x in light.measures],
+        })
+    fig = px.line(df, x="Temps", y="Puissance")
+    fig.update_traces(showlegend=True)
+
+    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    header="Puissance utilisée par la Lampe"
+    description = """Puissance utilisée par la Lampe en fonction du temps."""
+
+    return render_template("devices/advice.html", consumption=[], advices=light_advices, gen_advices=[],
+                                                         graphJSON=graphJSON, header=header,description=description)
 
 # Informations about fridge page
-@app.route("/fridge_advice/")
+@app.route("/fridge/")
 def fridge_advice():
     gen_advices =  AdvicesConsumption.query.filter(AdvicesConsumption.type_d.endswith("Achat G")).all()
     fridge_consumption = AdvicesConsumption.query.filter(AdvicesConsumption.device.endswith("Frigo")).all()
@@ -214,7 +228,7 @@ def fridge_advice():
     description = """Puissance utilisée par le Frigo en fonction du temps."""
 
 
-    return render_template("devices/fridge_advice.html", fridge_consumption=fridge_consumption, fridge_advices=fridge_advices, gen_advices=gen_advices,
+    return render_template("devices/advice.html", consumption=fridge_consumption, advices=fridge_advices, gen_advices=gen_advices,
                                                          graphJSON=graphJSON, header=header,description=description)
 
 # Informations about dishwasher page
@@ -224,7 +238,61 @@ def dishwasher_advice():
     gen_advices =  AdvicesConsumption.query.filter(AdvicesConsumption.device.endswith("Achat")).all()
     dishwasher_advices = AdvicesConsumption.query.filter(AdvicesConsumption.device.endswith("Lave-vaisselle")).all()
 
-    return render_template("devices/dishwasher.html", dishwasher_advices=dishwasher_advices, gen_advices=gen_advices)
+    dishwasher = Devices.query.filter(Devices.name == "Lave-vaisselle").first()
+    df = pd.DataFrame({
+            "Temps": [x.datetime for x in dishwasher.measures],
+            "Puissance": [x.measure for x in dishwasher.measures],
+        })
+    fig = px.line(df, x="Temps", y="Puissance")
+    fig.update_traces(showlegend=True)
+
+    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    header="Puissance utilisée par le Lave-vaisselle"
+    description = """Puissance utilisée par le Frigo en fonction du temps."""
+
+
+    return render_template("devices/advice.html", consumption=[], advices=dishwasher_advices, gen_advices=gen_advices,
+                                                         graphJSON=graphJSON, header=header,description=description)
+
+# Informations about hob page
+@app.route("/hob/")
+def hob_advice():
+
+    hob = Devices.query.filter(Devices.name == "Taque de cuisson").first()
+    df = pd.DataFrame({
+            "Temps": [x.datetime for x in hob.measures],
+            "Puissance": [x.measure for x in hob.measures],
+        })
+    fig = px.line(df, x="Temps", y="Puissance")
+    fig.update_traces(showlegend=True)
+
+    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    header="Puissance utilisée par la Taque de cuisson"
+    description = """Puissance utilisée par la Taque de cuisson en fonction du temps."""
+
+
+    return render_template("devices/advice.html", consumption=[], advices=[], gen_advices=[],
+                                                         graphJSON=graphJSON, header=header,description=description)
+
+# Informations about boiler page
+@app.route("/boil/")
+def boiler_advice():
+
+    boiler = Devices.query.filter(Devices.name == "Bouilloire").first()
+    df = pd.DataFrame({
+            "Temps": [x.datetime for x in boiler.measures],
+            "Puissance": [x.measure for x in boiler.measures],
+        })
+    fig = px.line(df, x="Temps", y="Puissance")
+    fig.update_traces(showlegend=True)
+
+    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    header="Puissance utilisée par la Bouilloire"
+    description = """Puissance utilisée par la Bouilloire."""
+
+
+    return render_template("devices/advice.html", consumption=[], advices=[], gen_advices=[],
+                                                         graphJSON=graphJSON, header=header,description=description)
 
 
 #######
