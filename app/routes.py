@@ -211,7 +211,7 @@ def fridge_advice():
 
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     header="Puissance utilisée par le Frigo"
-    description = """Vous pouvez manipuler le graphique."""
+    description = """Puissance utilisée par le Frigo en fonction du temps."""
 
 
     return render_template("devices/fridge_advice.html", fridge_consumption=fridge_consumption, fridge_advices=fridge_advices, gen_advices=gen_advices,
