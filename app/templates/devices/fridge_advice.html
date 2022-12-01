@@ -23,8 +23,8 @@
                   <div class="row">
                       <div class="col-8">
                           <div class="numbers">
-                              <p class="text-sm mb-0 text font-weight-bold">Appareils connectés<br></p>
-                              <h5 class="font-weight-bolder mb-0">4<br></h5>
+                              <p class="text-sm mb-0 text font-weight-bold">Puissance<br>en temps réel<br></p>
+                              <h5 class="font-weight-bolder mb-0">36 W<br></h5>
                           </div>
                       </div>
                       <div class="col-4 text-end">
@@ -42,8 +42,8 @@
                   <div class="row">
                       <div class="col-8">
                           <div class="numbers">
-                              <p class="text-sm mb-0 text font-weight-bold">Puissance totale en temps réel<br></p>
-                              <h5 id="kw_actual" class="font-weight-bolder mb-0">5 kW</h5>
+                              <p class="text-sm mb-0 text font-weight-bold">Consommation<br>aujourd'hui<br></p>
+                              <h5 id="kw_actual" class="font-weight-bolder mb-0">5 kWh</h5>
                           </div>
                       </div>
                       <div class="col-4 text-end">
@@ -61,7 +61,7 @@
                 <div class="row">
                     <div class="col-8">
                         <div class="numbers">
-                            <p class="text-sm mb-0 text font-weight-bold">Puissance totale en temps réel<br></p>
+                            <p class="text-sm mb-0 text font-weight-bold">Consommation<br>cette semaine<br></p>
                             <h5 id="kw_actual" class="font-weight-bolder mb-0">5 kW</h5>
                         </div>
                     </div>
@@ -80,7 +80,7 @@
               <div class="row">
                   <div class="col-8">
                       <div class="numbers">
-                          <p class="text-sm mb-0 text font-weight-bold">Puissance totale en temps réel<br></p>
+                          <p class="text-sm mb-0 text font-weight-bold">Consommation<br>ce mois<br></p>
                           <h5 id="kw_actual" class="font-weight-bolder mb-0">5 kW</h5>
                       </div>
                   </div>
@@ -94,115 +94,61 @@
       </div>
     </div>
     <div class="card mb-4">
+        <h3>{{header}}</h3>
+        <div id="chart" class="chart" style="width:90%; margin-left: auto; margin-right: auto;"></div>
+        <div>{{description}}</div>
     </div>
     <div class="row removable">
       <div class="col-lg-4 drop-zone">
         <h4>Conseils pour l'achat</h4>
     
           {% if gen_advices is defined and gen_advices|length %}
-          <div class="">
+          <ul>
         
             {% for advice in gen_advices %}
 
-              {{ advice["advice"]}}<br/>
+              <li>{{ advice["advice"]}}</li>
             
           {% endfor %}
-          </div>
+          </ul>
         {% endif %}
       </div>
       <div class="col-lg-4 drop-zone">
         <h4>Astuces</h4>
         
             {% if fridge_advices is defined and fridge_advices|length %}
-            <div class="">
+            <ul>
             
               {% for advice in fridge_advices %}
 
-                    {{ advice["advice"]}}<br />
+                    <li>{{ advice["advice"]}}</li>
                 
              {% endfor %}
-            </div>
+            </ul>
           {% endif %}
 
       </div>
       <div class="col-lg-4 drop-zone">
-        <h5>Petite comparaison de consommation</h5>
+        <h4>Comparaison conso</h4>
         
-            {% if fridge_consumption is defined and fridge_consumption|length %}
-            <table class="table table-striped table-sm">
-              <caption></caption>
-              <tr>
-                <th>Consommation</th>
-              </tr>
-  
-              {% for consump in fridge_consumption%}
-                
-                  <tr>
-                    <td>  {{ consump["advice"]}} </td>
-                  </tr> 
-             {% endfor %}
-            </table>
-          {% endif %}
+        {% if fridge_consumption is defined and fridge_consumption|length %}
+        <ul>
+          {% for consump in fridge_consumption%}
+            <li>  {{ consump["advice"]}} </li>
+          {% endfor %}
+        </ul>
+        {% endif %}
       </div>
     </div>
   </div>
-
-    <div class="col-5">
-    <h4>Conseils pour l'achat</h4>
-    
-        {% if gen_advices is defined and gen_advices|length %}
-        <div class="">
-        
-          {% for advice in gen_advices %}
-
-                {{ advice["advice"]}}<br />
-            
-         {% endfor %}
-        </div>
-      {% endif %}
-
-</div>
-    <div class="col-5">
-        <h4>Astuces</h4>
-        
-            {% if fridge_advices is defined and fridge_advices|length %}
-            <div class="">
-            
-              {% for advice in fridge_advices %}
-
-                    {{ advice["advice"]}}<br />
-                
-             {% endfor %}
-            </div>
-          {% endif %}
-
-    </div>
-    <div class="col-5">
-      <h5>Petite comparaison de consommation</h5>
-        
-            {% if fridge_consumption is defined and fridge_consumption|length %}
-            <table class="table table-striped table-sm">
-              <caption></caption>
-              <tr>
-                <th>N°</th>
-                <th>Consommation</th>
-              </tr>
-  
-              {% for consump in fridge_consumption%}
-                
-                  <tr>
-                    <td>{{ loop.index }}</td>
-                    <td>  {{ consump["advice"]}} </td>
-                  </tr> 
-             {% endfor %}
-            </table>
-          {% endif %}
-
-    </div>
-
-<script src="https://demos.creative-tim.com/soft-ui-dashboard/assets/js/core/popper.min.js"></script>
-<script src="https://demos.creative-tim.com/soft-ui-dashboard/assets/js/core/bootstrap.min.js"></script>
-<script src="https://demos.creative-tim.com/soft-ui-dashboard/assets/js/soft-ui-dashboard.min.js?v=1.0.2"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script type="text/javascript">
+    let graphs = {{graphJSON | safe}};
+    Plotly.plot('chart',graphs,{});
+  </script>
+  <script src="https://demos.creative-tim.com/soft-ui-dashboard/assets/js/core/popper.min.js"></script>
+  <script src="https://demos.creative-tim.com/soft-ui-dashboard/assets/js/core/bootstrap.min.js"></script>
+  <script src="https://demos.creative-tim.com/soft-ui-dashboard/assets/js/soft-ui-dashboard.min.js?v=1.0.2"></script>
 
 </body>
 

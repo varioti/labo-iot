@@ -8,7 +8,10 @@ from app.models import Devices, MeasureConsumption, AdvicesConsumption, WindowLo
 from sensors.window.Window import Window
 from sensors.energy.energy import Energy
 
-from app import db
+import pandas as pd
+import json
+import plotly
+import plotly.express as px
 
 ###########
 # SENSORS #
@@ -87,10 +90,11 @@ scheduler.add_job(id='window', func=window_behaviour, trigger="interval", second
 # Set the reccurent backround action (for energy) each 5 sec
 scheduler.add_job(id='energy', func=energy_behaviour, trigger="interval", seconds=5)
 
-##########
+######################################################################################
 # ROUTES #
 ##########
 
+### MAIN PAGE ###
 @app.route("/")
 def dashboard():
     temp_in, temp_out, hum = w.get_measures()
@@ -118,30 +122,44 @@ def dashboard():
     return render_template("dashboard.html", temp_in=temp_in, temp_out=temp_out, temp_desired=w.temp_desired, hum=hum, state=current_state, is_open=is_open, mode_auto=mode, 
                                              energy=energy, devices_conso=devices_conso)
 
-
-@app.route("/window/")
-def window():
-    with app.app_context():
-        log = list(map(lambda x: x.get_serializable_action(), list(WindowLog.query.all())))
-
-    return render_template("log.html", log=log)
-
+### WINDOW PAGES ###
+# Open window input
 @app.route("/open/")
 def manual_open():
     w.open()
     w.set_manual()
     return redirect(url_for("dashboard "))
 
+# Close window input
 @app.route("/close/")
 def manual_close():
     w.close()
     w.set_manual()
     return redirect(url_for("dashboard"))
 
+# Change mode (auto or manual) of the window input
+@app.route("/mode/")
+def set_mode():
+    if w.mode_auto :
+        w.set_manual()
+    else :
+        w.set_auto()
+    return redirect(url_for("dashboard"))
+
+# Log of auto actions of the window page
+@app.route("/window/")
+def window():
+    with app.app_context():
+        log = list(map(lambda x: x.get_serializable_action(), list(WindowLog.query.all())))
+
+    return render_template("window/log.html", log=log)
+
+# Update window informations page
 @app.route("/update/")
 def update():
-    return render_template("parameters.html", temp=w.temp_desired, max_hum=w.max_hum)
+    return render_template("window/parameters.html", temp=w.temp_desired, max_hum=w.max_hum)
 
+# Update temperature desired input
 @app.route("/update/temperature/")
 def update_temp():
     if request.args.get("temp", None):
@@ -152,6 +170,7 @@ def update_temp():
 
     return redirect(url_for("dashboard"))
 
+# Update max humidity desired input
 @app.route("/update/humidity/")
 def update_hum():
     if request.args.get("hum", None):
@@ -162,43 +181,50 @@ def update_hum():
 
     return redirect(url_for("dashboard"))
 
-@app.route("/mode/")
-def set_mode():
-    if w.mode_auto :
-        w.set_manual()
-    else :
-        w.set_auto()
-
-    return redirect(url_for("dashboard"))
-
+### CONSO PAGES ###
+# Tables of each mesures per device page
 @app.route("/energy_history/")
 def histo_conso():
     return render_template("histo_conso.html")
 
-
+# Informations about light page
 @app.route("/light_advice/")
 def light_advice():
 
     light_advices = AdvicesConsumption.query.filter(AdvicesConsumption.type_d.endswith(" Ampoule")).all()
-    return render_template("light_advice.html", light_advices=light_advices)
+    return render_template("devices/light_advice.html", light_advices=light_advices)
 
+# Informations about fridge page
 @app.route("/fridge_advice/")
 def fridge_advice():
-
     gen_advices =  AdvicesConsumption.query.filter(AdvicesConsumption.type_d.endswith("Achat G")).all()
     fridge_consumption = AdvicesConsumption.query.filter(AdvicesConsumption.device.endswith("Frigo")).all()
     fridge_advices = AdvicesConsumption.query.filter(AdvicesConsumption.device.endswith("Frigidaire")).all()
 
-    return render_template("fridge_advice.html", fridge_consumption=fridge_consumption, fridge_advices=fridge_advices,
-                            gen_advices=gen_advices)
+    fridge = Devices.query.filter(Devices.name == "Frigo").first()
+    df = pd.DataFrame({
+            "Temps": [x.datetime for x in fridge.measures],
+            "Puissance": [x.measure for x in fridge.measures],
+        })
+    fig = px.line(df, x="Temps", y="Puissance")
+    fig.update_traces(showlegend=True)
 
+    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    header="Puissance utilisée par le Frigo"
+    description = """Vous pouvez manipuler le graphique."""
+
+
+    return render_template("devices/fridge_advice.html", fridge_consumption=fridge_consumption, fridge_advices=fridge_advices, gen_advices=gen_advices,
+                                                         graphJSON=graphJSON, header=header,description=description)
+
+# Informations about dishwasher page
 @app.route("/dishwasher/")
 def dishwasher_advice():
 
     gen_advices =  AdvicesConsumption.query.filter(AdvicesConsumption.device.endswith("Achat")).all()
     dishwasher_advices = AdvicesConsumption.query.filter(AdvicesConsumption.device.endswith("Lave-vaisselle")).all()
 
-    return render_template("dishwasher.html", dishwasher_advices=dishwasher_advices, gen_advices=gen_advices)
+    return render_template("devices/dishwasher.html", dishwasher_advices=dishwasher_advices, gen_advices=gen_advices)
 
 
 #######

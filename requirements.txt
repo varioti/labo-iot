@@ -3,3 +3,5 @@ flask
 flask-sqlalchemy
 flask_apscheduler
 flask-socketio
+pandas
+plotly
