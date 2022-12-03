@@ -1,6 +1,7 @@
 from Phidget22.Phidget import *
 from Phidget22.Devices.VoltageInput import *
 import time
+import random
 
 class Energy:
     def __init__(self, hub_port=0, nb_volt=12, simulate=False):
@@ -20,9 +21,7 @@ class Energy:
         if not self.simulate:
             self.nb_amp = self.sensor.getSensorValue()
         else:
-            self.nb_amp = 3
-
-        print(self.nb_amp)
+            self.nb_amp = random.uniform(0.5, 4.5)
 
     # Get AC value (in AMP)
     def get_amp(self):

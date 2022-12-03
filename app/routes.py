@@ -29,7 +29,11 @@ print(devices)
 
 e = {}
 for device in devices:
-    e[device.name] = Energy(hub_port= device.hub_port,nb_volt= device.nb_volt, simulate=True) # Set simulate to True if phidgets not plugged
+    if device.hub_port == -1:
+        e[device.name] = Energy(hub_port= 0,nb_volt= device.nb_volt, simulate=True) # Set simulate to True if phidgets not plugged
+    else:
+        e[device.name] = Energy(hub_port= device.hub_port,nb_volt= device.nb_volt, simulate=True) # Set simulate to True if phidgets not plugged
+
 
 # Recurrent background action of window
 def window_behaviour():
@@ -80,7 +84,6 @@ def energy_behaviour():
             devices_measures.append(list(map(lambda x: x.get_serializable_measure(), list(device.measures))))
     
     # Send info to page
-    socketio.emit("newmeasure", (devices_names, devices_measures))
     socketio.emit("newdashboard", (current_total, round(today_conso, 2)))
     
 
@@ -88,7 +91,7 @@ def energy_behaviour():
 scheduler.add_job(id='window', func=window_behaviour, trigger="interval", seconds=5)
 
 # Set the reccurent backround action (for energy) each 5 sec
-scheduler.add_job(id='energy', func=energy_behaviour, trigger="interval", seconds=5)
+scheduler.add_job(id='energy', func=energy_behaviour, trigger="interval", seconds=1)
 
 ######################################################################################
 # ROUTES #
@@ -117,7 +120,7 @@ def dashboard():
     devices_conso={}
     for key in e.keys():
         e[key].make_measure()
-        devices_conso[key] = e[key].get_watt()
+        devices_conso[key] = round(e[key].get_watt(),1)
 
     return render_template("dashboard.html", temp_in=temp_in, temp_out=temp_out, temp_desired=w.temp_desired, hum=hum, state=current_state, is_open=is_open, mode_auto=mode, 
                                              energy=energy, devices_conso=devices_conso)
