@@ -154,10 +154,10 @@ with app.app_context():
 
     Devices.query.delete()
     Devices.add_new_device(name="Frigo", description="Frigo de 12V", nb_volt=12, hub_port=0)
-    Devices.add_new_device(name="Lave-vaisselle", description="Lave-vaisselle de 22V", nb_volt=22, hub_port=1)
-    Devices.add_new_device(name="Lampe", description="Lampe de 5V", nb_volt=5, hub_port=4)
+    Devices.add_new_device(name="Lave-vaisselle", description="Lave-vaisselle de 22V", nb_volt=22, hub_port=4)
+    Devices.add_new_device(name="Lampe", description="Lampe de 5V", nb_volt=5, hub_port=5)
     Devices.add_new_device(name="Bouilloire", description="Bouiloire de 12V", nb_volt=12, hub_port=2)
-    Devices.add_new_device(name="Taque de cuisson", description="Taque de cuisson", nb_volt=120, hub_port=3)
+    Devices.add_new_device(name="Taque de cuisson", description="Taque de cuisson", nb_volt=120, hub_port=1)
 
     AdvicesConsumption.query.delete()
     AdvicesConsumption.add_new_advice("Consommation Ampoule", "Pour donner 750 lumens, une ampoule à incandescence a besoin de 60 W", "Ampoule à incandescence")
