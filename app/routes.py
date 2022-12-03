@@ -17,7 +17,7 @@ import plotly.express as px
 # SENSORS #
 ###########
 
-w = Window(is_testing=True) # Set is_testing to True if phidgets not plugged
+w = Window(is_testing=False) # Set is_testing to True if phidgets not plugged
 # Initializing the database
 with app.app_context():
     devices =  list(Devices.query.all())
@@ -29,7 +29,10 @@ print(devices)
 
 e = {}
 for device in devices:
-    e[device.name] = Energy(hub_port= device.hub_port,nb_volt= device.nb_volt, simulate=True) # Set simulate to True if phidgets not plugged
+    if device.hub_port != -1:
+        e[device.name] = Energy(hub_port= device.hub_port,nb_volt= device.nb_volt, simulate=False) # Set simulate to True if phidgets not plugged
+    else:
+        e[device.name] = Energy(hub_port=0,nb_volt=device.nb_volt, simulate=True)
 
 # Recurrent background action of window
 def window_behaviour():

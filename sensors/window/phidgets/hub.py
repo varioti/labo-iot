@@ -9,7 +9,7 @@ class Hub:
     def __init__(self):
         self.temp_out = VoltageRatioInput()
         self.temp_out.setIsHubPortDevice(True)
-        self.temp_out.setHubPort(0)
+        self.temp_out.setHubPort(5)
         self.temp_out.openWaitForAttachment(5000)
         self.temp_out.setSensorType(VoltageRatioSensorType.SENSOR_TYPE_1124) # Temperature sensor
 
@@ -18,6 +18,8 @@ class Hub:
 
         self.hum = HumiditySensor()
         self.hum.openWaitForAttachment(5000)
+
+        time.sleep(1)
 
     def get_temp_out(self):
         return self.temp_out.getSensorValue()
