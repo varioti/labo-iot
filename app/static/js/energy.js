@@ -1,35 +1,21 @@
-const socket = io();
-socket.on("newmeasure", newmeasure);
+socket.on("updatedevices", updateDevice);
 
 ///////////////////////////////////////
-// UPDATE when new measures received //
+// UPDATE device page when new measures received //
 ///////////////////////////////////////
-function newmeasure(names, measures) {
-    let measures_tables = document.getElementById("measures_tables");
-    while (measures_tables.firstChild) {
-        measures_tables.removeChild(measures_tables.lastChild);
-    }
+function updateDevice(summary_devices, measures_devices) {
+    var device_name = document.querySelector('meta[name="device_name"]').content;
+
+    var kw_actual = document.getElementById("kw_actual");
+    kw_actual.innerHTML = measures_devices[device_name] + " W";
     
-    for (let i=0; i < names.length; i++) {
-        let table = document.createElement('table');
-        table.display = "inline-block";
-        let head = table.insertRow(0);
-        let head1 = head.insertCell(0);
-        let head2 = head.insertCell(1);
-        head1.innerHTML = names[i]
-        head2.innerHTML = "Mesure"
-        
-        for (let j=0; j < measures[i].length; j++) {
-            let row = table.insertRow(1);
-            let cell1 = row.insertCell(0);
-            let cell2 = row.insertCell(1);
-            cell1.innerHTML = measures[i][j]["datetime"]
-            cell2.innerHTML = measures[i][j]["measure"]
-        }
-        let part = document.createElement('div');
-        part.className = "part"
-        part.appendChild(table);
-        measures_tables.appendChild(part);
-    }
+    var kw_today = document.getElementById("kw_today");
+    kw_today.innerHTML = summary_devices[device_name]["today"] + " kWh";
+
+    var kw_week = document.getElementById("kw_week");
+    kw_week.innerHTML = summary_devices[device_name]["week"] + " kWh";
+
+    var kw_month = document.getElementById("kw_month");
+    kw_month.innerHTML = summary_devices[device_name]["month"] + " kWh";
 
 }

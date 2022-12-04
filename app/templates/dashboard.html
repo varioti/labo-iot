@@ -108,7 +108,7 @@
                                     <div class="col-8">
                                         <div class="numbers">
                                             <p class="text-sm mb-0 text font-weight-bold">Consommation<br>cette semaine</p>
-                                            <h5 class="font-weight-bolder mb-0">{{energy["kwh_today"]}} kWh
+                                            <h5 id="kw_week" class="font-weight-bolder mb-0">{{energy["kwh_today"]}} kWh
                                                 {% if energy["pc_week"] < 0 %}
                                                     <span class="text-success text-sm font-weight-bolder">{{energy["pc_week"]}}%</span>
                                                 {% else %}
@@ -132,7 +132,7 @@
                                     <div class="col-8">
                                         <div class="numbers">
                                             <p class="text-sm mb-0 text font-weight-bold">Consommation<br>ce mois</p>
-                                            <h5 class="font-weight-bolder mb-0">{{energy["kwh_month"]}} kWh 
+                                            <h5 id="kw_month" class="font-weight-bolder mb-0">{{energy["kwh_month"]}} kWh 
                                                 {% if energy["pc_month"] < 0 %}
                                                     <span class="text-success text-sm font-weight-bolder">{{energy["pc_month"]}}%</span>
                                                 {% else %}
@@ -158,31 +158,31 @@
                 <img src="{{url_for('static', filename='image/cuisine.png')}}"/>
                 <a href="/fridge/">
                     <div class="text-block" id="frigo">
-                        <p style="font-size: 20px;margin: auto;">{{devices_conso["Frigo"]}} W</p>
+                        <p id="pfridge" style="font-size: 20px;margin: auto;">{{devices_conso["Frigo"]}} W</p>
                         <span class="tooltiptext">Frigo</span>
                     </div>
                 </a>
                 <a href="/hob/">
                     <div class="text-block" id="hob">
-                        <p style="font-size: 20px;margin: auto;">{{devices_conso["Taque de cuisson"]}} W</p>
+                        <p id="phob" style="font-size: 20px;margin: auto;">{{devices_conso["Taque de cuisson"]}} W</p>
                         <span class="tooltiptext">Taque de cuisson</span>
                     </div>
                 </a>
                 <a href="/dishwasher/">
                     <div class="text-block" id="dishwasher">
-                        <p style="font-size: 20px;margin: auto;">{{devices_conso["Lave-vaisselle"]}} W</p>
+                        <p id="pdishwasher" style="font-size: 20px;margin: auto;">{{devices_conso["Lave-vaisselle"]}} W</p>
                         <span class="tooltiptext">Lave-vaisselle</span>
                     </div>
                 </a>
                 <a href="/light/">
                     <div class="text-block" id="light">
-                        <p style="font-size: 20px;margin: auto;">{{devices_conso["Lampe"]}} W</p>
+                        <p id="plight" style="font-size: 20px;margin: auto;">{{devices_conso["Lampe"]}} W</p>
                         <span class="tooltiptext">Lampes</span>
                     </div>
                 </a>
                 <a href="/boil/">
                     <div class="text-block" id="boil">
-                        <p style="font-size: 20px;margin: auto;">{{devices_conso["Bouilloire"]}} W</p>
+                        <p id="pboil" style="font-size: 20px;margin: auto;">{{devices_conso["Bouilloire"]}} W</p>
                         <span class="tooltiptext">Bouilloire</span>
                     </div>
                 </a>

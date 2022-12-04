@@ -27,7 +27,7 @@
                       <div class="col-8">
                           <div class="numbers">
                               <p class="text-sm mb-0 text font-weight-bold">Puissance en temps réel<br></p>
-                              <h5 class="font-weight-bolder mb-0">36 W<br></h5>
+                              <h5 id="kw_actual" class="font-weight-bolder mb-0">- W<br></h5>
                           </div>
                       </div>
                       <div class="col-4 text-end">
@@ -46,7 +46,7 @@
                       <div class="col-8">
                           <div class="numbers">
                               <p class="text-sm mb-0 text font-weight-bold">Consommation aujourd'hui<br></p>
-                              <h5 id="kw_actual" class="font-weight-bolder mb-0">5 kWh</h5>
+                              <h5 id="kw_today" class="font-weight-bolder mb-0">- Wh</h5>
                           </div>
                       </div>
                       <div class="col-4 text-end">
@@ -65,7 +65,7 @@
                     <div class="col-8">
                         <div class="numbers">
                             <p class="text-sm mb-0 text font-weight-bold">Consommation cette semaine<br></p>
-                            <h5 id="kw_actual" class="font-weight-bolder mb-0">5 kW</h5>
+                            <h5 id="kw_week" class="font-weight-bolder mb-0">- kWh</h5>
                         </div>
                     </div>
                     <div class="col-4 text-end">
@@ -84,7 +84,7 @@
                   <div class="col-8">
                       <div class="numbers">
                           <p class="text-sm mb-0 text font-weight-bold">Consommation ce mois<br></p>
-                          <h5 id="kw_actual" class="font-weight-bolder mb-0">5 kW</h5>
+                          <h5 id="kw_month" class="font-weight-bolder mb-0">- kWh</h5>
                       </div>
                   </div>
                   <div class="col-4 text-end">
@@ -98,11 +98,11 @@
     </div>
 
     <div class="row removable" style="text-align: center;">
-        <div class="col-lg-8 drop-zone">
+        <div class="col-lg-6 drop-zone">
             <h4>{{header}}</h4>
             <div id="chart" class="chart" style="width:95%; margin-left: auto; margin-right: auto;"></div>
         </div>
-        <div class="col-lg-4 drop-zone">
+        <div class="col-lg-6 drop-zone">
             <!-- SlideS -->
             <div class="slideshow-container">
                 {% if consumption is defined and consumption|length %}
@@ -156,14 +156,22 @@
         </div>
     </div>
   </div>
+
+  <meta name="device_name" content="{{device_name}}">
+
+  <script src="{{url_for('static', filename='js/energy.js')}}"></script>
+
+
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <script type="text/javascript">
     let graphs = {{graphJSON | safe}};
     Plotly.plot('chart',graphs,{});
   </script>
+
   <script src="https://demos.creative-tim.com/soft-ui-dashboard/assets/js/core/popper.min.js"></script>
   <script src="https://demos.creative-tim.com/soft-ui-dashboard/assets/js/core/bootstrap.min.js"></script>
   <script src="https://demos.creative-tim.com/soft-ui-dashboard/assets/js/soft-ui-dashboard.min.js?v=1.0.2"></script>
+
   <script>
     let slideIndex = 1;
     showSlides(slideIndex);
