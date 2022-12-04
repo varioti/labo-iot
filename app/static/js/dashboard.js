@@ -5,6 +5,8 @@ socket.on("newdashboard", updateEnergy);
 ///////////////////////////////////////
 function updateEnergy(new_kw, new_today_kw, new_week_kw, new_month_kw, measures_devices) {
     // General values    
+    var mean = new_kw*1000/5;
+
     var kw_actual = document.getElementById("kw_actual");
     kw_actual.innerHTML = new_kw + " kW";
     
@@ -18,19 +20,19 @@ function updateEnergy(new_kw, new_today_kw, new_week_kw, new_month_kw, measures_
     kw_month.innerHTML = new_month_kw + " kWh";
 
     var fridge = document.getElementById("pfridge");
-    fridge.innerHTML = deviceValue(measures_devices["Frigo"],new_kw*1000/5);
+    fridge.innerHTML = deviceValue(measures_devices["Frigo"],mean);
     
     var hob = document.getElementById("phob");
-    hob.innerHTML = deviceValue(measures_devices["Taque de cuisson"],new_kw*1000/5);
+    hob.innerHTML = deviceValue(measures_devices["Taque de cuisson"],mean);
 
     var dishw = document.getElementById("pdishwasher");
-    dishw.innerHTML = deviceValue(measures_devices["Lave-vaisselle"],new_kw*1000/5);
+    dishw.innerHTML = deviceValue(measures_devices["Lave-vaisselle"],mean);
 
     var light = document.getElementById("plight");
-    light.innerHTML = deviceValue(measures_devices["Lampe"],new_kw*1000/5);
+    light.innerHTML = deviceValue(measures_devices["Lampe"],mean);
 
     var boil = document.getElementById("pboil");
-    boil.innerHTML = deviceValue(measures_devices["Bouilloire"],new_kw*1000/5);
+    boil.innerHTML = deviceValue(measures_devices["Bouilloire"],mean);
 }
 
 function deviceValue(deviceValue, mean) {
