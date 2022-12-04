@@ -55,7 +55,7 @@ class Window:
         print("open")
         self.is_open = True
         if not self.is_testing :
-            self.motor.set_position(30)
+            self.motor.set_position(70)
 
     # Close the window (use motor)
     def close(self):
