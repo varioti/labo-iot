@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from flask import render_template, redirect, Flask
 from flask import url_for, request
 import time 
@@ -69,29 +69,58 @@ def energy_behaviour():
 
         now = datetime.today()
         begin_day = datetime(now.year, now.month, now.day)
+        begin_week = now - timedelta(days=now.weekday())
+        begin_month = datetime(now.year, now.month, 1)
+
         nb_hours = (now - begin_day).total_seconds()/3600
         
+        devices_actual_conso={}
+        devices_summary_conso={}
+
         today_conso = 0 
+        week_conso = 0
+        month_conso = 0
         for device in devices:
             devices_names.append(device.name)
+
             # Get total kWh of the device from today 0:00 to now
             device_today_measure = device.get_between_measures(begin_day, now)
             nb_hours = (device_today_measure[-1].datetime - device_today_measure[0].datetime).total_seconds()/3600 #nb hours between first measure of the day and last
-            device_conso = ((sum(m.measure for m in (device_today_measure)) / len(device_today_measure))/100) * nb_hours
-            today_conso += device_conso
+            today_device_conso = ((sum(m.measure for m in (device_today_measure)) / len(device_today_measure))) * nb_hours
+            today_conso += today_device_conso/1000
+
+            # Get total kWh of the device from beginning of the week to now
+            device_week_measure = device.get_between_measures(begin_week, now)
+            nb_hours = (device_week_measure[-1].datetime - device_week_measure[0].datetime).total_seconds()/3600 #nb hours between first measure of the week and last
+            week_device_conso = ((sum(m.measure for m in (device_week_measure)) / len(device_week_measure))) * nb_hours
+            week_conso += week_device_conso/1000
+
+            # Get total kWh of the device from beginning ot the month to now
+            device_month_measure = device.get_between_measures(begin_month, now)
+            nb_hours = (device_month_measure[-1].datetime - device_month_measure[0].datetime).total_seconds()/3600 #nb hours between first measure of the day and last
+            month_device_conso = ((sum(m.measure for m in (device_month_measure)) / len(device_month_measure))) * nb_hours
+            month_conso += month_device_conso/1000
+
+            devices_summary_conso[device.name] = {"today":round(today_device_conso/1000,3),"week":round(week_device_conso/1000,3),"month":round(month_device_conso/1000,3)}
 
             # Get all measures from device
             devices_measures.append(list(map(lambda x: x.get_serializable_measure(), list(device.measures))))
+
+            e[device.name].make_measure()
+            devices_actual_conso[device.name] = round(e[device.name].get_watt(),1)
     
     # Send info to page
-    socketio.emit("newdashboard", (current_total, round(today_conso, 2)))
+    socketio.emit("newdashboard", (round(current_total,2), round(today_conso, 3), round(week_conso, 3), round(month_conso, 3), devices_actual_conso))
+
+    # Send info to devices pages
+    socketio.emit("updatedevices", (devices_summary_conso, devices_actual_conso))
     
 
 # Set the reccurent backround action (for window) each 5 sec
 scheduler.add_job(id='window', func=window_behaviour, trigger="interval", seconds=5)
 
 # Set the reccurent backround action (for energy) each 5 sec
-scheduler.add_job(id='energy', func=energy_behaviour, trigger="interval", seconds=1)
+scheduler.add_job(id='energy', func=energy_behaviour, trigger="interval", seconds=2)
 
 ######################################################################################
 # ROUTES #
@@ -105,16 +134,16 @@ def dashboard():
     is_open = w.get_is_open()
     mode = w.mode_auto
 
-    # Static values
+    # Static values waiting first update from sheduled task each 2 sec
     energy={
         "nb_app":5,
-        "kw_actual":0.5,
-        "kwh_today":40,
-        "pc_today":4.5,
-        "kwh_week":40,
-        "pc_week":-2,
-        "kwh_month":40,
-        "pc_month":5
+        "kw_actual":0,
+        "kwh_today":0,
+        "pc_today":0,
+        "kwh_week":0,
+        "pc_week":0,
+        "kwh_month":0,
+        "pc_month":0
     }
 
     devices_conso={}
@@ -131,7 +160,7 @@ def dashboard():
 def manual_open():
     w.open()
     w.set_manual()
-    return redirect(url_for("dashboard "))
+    return redirect(url_for("dashboard"))
 
 # Close window input
 @app.route("/close/")
@@ -194,8 +223,10 @@ def histo_conso():
 @app.route("/light/")
 def light_advice():
 
+    # Advices
     light_advices = AdvicesConsumption.query.filter(AdvicesConsumption.type_d.endswith(" Ampoule")).all()
 
+    # Graph
     light = Devices.query.filter(Devices.name == "Lampe").first()
     df = pd.DataFrame({
             "Temps": [x.datetime for x in light.measures],
@@ -203,12 +234,17 @@ def light_advice():
         })
     fig = px.line(df, x="Temps", y="Puissance")
     fig.update_traces(showlegend=True)
-
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     header="Puissance utilisée par la Lampe"
     description = """Puissance utilisée par la Lampe en fonction du temps."""
 
-    return render_template("devices/advice.html", consumption=[], advices=light_advices, gen_advices=[],
+    # Compute the mean power of light (when power on) to add it in the conso advices
+    measures_light_on = [x.measure for x in light.measures if x.measure > 0.5]
+    mean_power = round(sum(measures_light_on)/len(measures_light_on),1)
+    light_advices.append({"advice":f"Votre ampoule utilise {mean_power} W en moyenne quand elle est allumée."})
+
+
+    return render_template("devices/advice.html", consumption=light_advices, advices=[], gen_advices=[], device_name="Lampe",
                                                          graphJSON=graphJSON, header=header,description=description)
 
 # Informations about fridge page
@@ -231,7 +267,7 @@ def fridge_advice():
     description = """Puissance utilisée par le Frigo en fonction du temps."""
 
 
-    return render_template("devices/advice.html", consumption=fridge_consumption, advices=fridge_advices, gen_advices=gen_advices,
+    return render_template("devices/advice.html", consumption=fridge_consumption, advices=fridge_advices, gen_advices=gen_advices, device_name="Frigo",
                                                          graphJSON=graphJSON, header=header,description=description)
 
 # Informations about dishwasher page
@@ -254,7 +290,7 @@ def dishwasher_advice():
     description = """Puissance utilisée par le Frigo en fonction du temps."""
 
 
-    return render_template("devices/advice.html", consumption=[], advices=dishwasher_advices, gen_advices=gen_advices,
+    return render_template("devices/advice.html", consumption=[], advices=dishwasher_advices, gen_advices=gen_advices, device_name="Lave-vaisselle",
                                                          graphJSON=graphJSON, header=header,description=description)
 
 # Informations about hob page
@@ -274,7 +310,7 @@ def hob_advice():
     description = """Puissance utilisée par la Taque de cuisson en fonction du temps."""
 
 
-    return render_template("devices/advice.html", consumption=[], advices=[], gen_advices=[],
+    return render_template("devices/advice.html", consumption=[], advices=[], gen_advices=[], device_name="Taque de cuisson",
                                                          graphJSON=graphJSON, header=header,description=description)
 
 # Informations about boiler page
@@ -294,7 +330,7 @@ def boiler_advice():
     description = """Puissance utilisée par la Bouilloire."""
 
 
-    return render_template("devices/advice.html", consumption=[], advices=[], gen_advices=[],
+    return render_template("devices/advice.html", consumption=[], advices=[], gen_advices=[], device_name="Bouilloire",
                                                          graphJSON=graphJSON, header=header,description=description)
 
 

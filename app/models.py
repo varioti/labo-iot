@@ -99,7 +99,7 @@ class MeasureConsumption(db.Model):
     datetime = db.Column(db.DateTime, nullable=False)
 
     device_id = db.Column(db.Integer, db.ForeignKey("devices.id"))
-    device = db.relationship("Devices", backref=db.backref("deviceI", lazy=True), overlaps="measures")
+    device = db.relationship("Devices", backref=db.backref("device", lazy=True), overlaps="measures")
 
     def add_new_measure(m, did, date = None):
         """
@@ -153,16 +153,16 @@ with app.app_context():
     db.create_all()
 
     Devices.query.delete()
-    Devices.add_new_device(name="Frigo", description="Frigo de 12V", nb_volt=12, hub_port=0)
-    Devices.add_new_device(name="Lave-vaisselle", description="Lave-vaisselle de 22V", nb_volt=22, hub_port=2)
-    Devices.add_new_device(name="Lampe", description="Lampe de 5V", nb_volt=5, hub_port=3)
-    Devices.add_new_device(name="Bouilloire", description="Bouiloire de 12V", nb_volt=12, hub_port=-1)
-    Devices.add_new_device(name="Taque de cuisson", description="Taque de cuisson", nb_volt=120, hub_port=1)
+    Devices.add_new_device(name="Frigo", description="Frigo de 220V", nb_volt=220, hub_port=0)
+    Devices.add_new_device(name="Lave-vaisselle", description="Lave-vaisselle de 22V", nb_volt=120, hub_port=2)
+    Devices.add_new_device(name="Lampe", description="Ampoule éco de 12V", nb_volt=12, hub_port=3)
+    Devices.add_new_device(name="Bouilloire", description="Bouiloire de 24V", nb_volt=24, hub_port=-1)
+    Devices.add_new_device(name="Taque de cuisson", description="Taque de cuisson électrique", nb_volt=220, hub_port=1)
 
     AdvicesConsumption.query.delete()
-    AdvicesConsumption.add_new_advice("Consommation Ampoule", "Pour donner 750 lumens, une ampoule à incandescence a besoin de 60 W", "Ampoule à incandescence")
-    AdvicesConsumption.add_new_advice("Consommation Ampoule", "Pour donner 750 lumens, une ampoule économique a besoin 12 W ", "Ampoule économique")
-    AdvicesConsumption.add_new_advice("Consommation Ampoule", "Pour donner 750 lumens une ampoule LED a besoin 6.5 W", "Ampoule LED")
+    AdvicesConsumption.add_new_advice("Consommation Ampoule", "Une ampoule à incandescence a besoin de 60 W pour donner 750 lumens", "Ampoule à incandescence")
+    AdvicesConsumption.add_new_advice("Consommation Ampoule", "Une ampoule économique a besoin 12 W pour donner 750 lumens", "Ampoule économique")
+    AdvicesConsumption.add_new_advice("Consommation Ampoule", "Une ampoule LED a besoin 6.5 W pour donner 750 lumens", "Ampoule LED")
 
     AdvicesConsumption.add_new_advice("Consommation Taque", "Energie nécessaire pour chauffer 1,5 litre d'eau de 20 à 95°C = 295 Wh", "Gazette")
     AdvicesConsumption.add_new_advice("Consommation Taque", "Energie nécessaire pour chauffer 1,5 litre d'eau de 20 à 95°C = 162 Wh", "Induction")

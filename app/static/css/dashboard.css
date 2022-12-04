@@ -18,28 +18,28 @@
 } 
 
 #frigo {
-  top: 30px;
-  left: 420px;
+  top: 24px;
+  left: 320px;
 }
 
 #hob {
-  top: 245px;
-  left: 100px;
+  top: 191px;
+  left: 67px;
 }
 
 #dishwasher {
-  top: 45px;
-  left: 100px;
+  top: 87px;
+  left: 66px;
 }
 
 #light {
-  top: 250px;
-  left: 250px;
+  top: 118px;
+  left: 188px;
 }
 
 #boil {
-  top: 300px;
-  left: 300px;
+  top: 163px;
+  left: 345px;
 }
 
 .text-block .tooltiptext {
