@@ -62,7 +62,7 @@ def energy_behaviour():
         for eid in e.keys():
             sensor = e[eid]
             sensor.make_measure()
-            current_total += sensor.get_watt()/100
+            current_total += sensor.get_watt()/1000
             device = Devices.query.filter(Devices.name == eid).first()
             MeasureConsumption.add_new_measure(sensor.get_watt(), device.id)
             devices.append(device)
@@ -106,7 +106,6 @@ def energy_behaviour():
             # Get all measures from device
             devices_measures.append(list(map(lambda x: x.get_serializable_measure(), list(device.measures))))
 
-            e[device.name].make_measure()
             devices_actual_conso[device.name] = round(e[device.name].get_watt(),1)
     
     # Send info to page
