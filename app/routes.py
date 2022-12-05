@@ -69,7 +69,8 @@ def energy_behaviour():
 
         now = datetime.today()
         begin_day = datetime(now.year, now.month, now.day)
-        begin_week = now - timedelta(days=now.weekday())
+        monday = now - timedelta(days=now.weekday())
+        begin_week = datetime(monday.year, monday.month, monday.day)
         begin_month = datetime(now.year, now.month, 1)
 
         nb_hours = (now - begin_day).total_seconds()/3600
