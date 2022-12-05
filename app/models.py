@@ -206,4 +206,12 @@ with app.app_context():
 
     AdvicesConsumption.add_new_advice("Utilisation", "Pour l'induction utiliser des ustenciles à adaptés (au fond aimanté)", "Induction")
 
+    AdvicesConsumption.add_new_advice("Consommation Bouilloire", "On utilise la même quantité d’énergie pour chauffer de l’eau avec une bouilloire électrique, un micro-onde, une gazière, une plaque à induction ou une taque électrique. ", "Bouilloire")
+    AdvicesConsumption.add_new_advice("Consommation Bouilloire", "Chauffer l'équivalent d'une tasse de thé avec des appareils de même puissance donne les résultats suivants", "Bouilloire")
+    AdvicesConsumption.add_new_advice("Consommation Bouilloire", "Bouilloire électrique: 50 sec pour une consommation de 0.02 kWh", "Bouilloire")
+    AdvicesConsumption.add_new_advice("Consommation Bouilloire", "Micro-ondes: 2 minutes pour une consommation de 0.04 kWh", "Micro-ondes")
+    AdvicesConsumption.add_new_advice("Consommation Bouilloire", "Gazinière ou plaque électrique(sans induction): plus de 3 minutes pour une consommation de 0.07 kWh", "Gazinière")
+    AdvicesConsumption.add_new_advice("Consommation Bouilloire", "Les différences sont encore plus grandes si l’on chauffe 1 litre d’eau.", "Bouilloire")
+    AdvicesConsumption.add_new_advice("Consommation Bouilloire", "Si on convertit ces consommations en euro, vu qu’1 kWh de gaz coûte moins cher qu’1 kWh d’électricité, le gaz est la source d’énergie la plus économique.", "Bouilloire")
+
     MeasureConsumption.query.delete()

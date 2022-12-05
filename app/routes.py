@@ -318,6 +318,8 @@ def hob_advice():
 def boiler_advice():
 
     boiler = Devices.query.filter(Devices.name == "Bouilloire").first()
+    consumption = AdvicesConsumption.query.filter(AdvicesConsumption.type_d.endswith(" Bouilloire")).all()
+
     df = pd.DataFrame({
             "Temps": [x.datetime for x in boiler.measures],
             "Puissance": [x.measure for x in boiler.measures],
@@ -330,7 +332,7 @@ def boiler_advice():
     description = """Puissance utilisée par la Bouilloire."""
 
 
-    return render_template("devices/advice.html", consumption=[], advices=[], gen_advices=[], device_name="Bouilloire",
+    return render_template("devices/advice.html", consumption=consumption, advices=[], gen_advices=[], device_name="Bouilloire",
                                                          graphJSON=graphJSON, header=header,description=description)
 
 
